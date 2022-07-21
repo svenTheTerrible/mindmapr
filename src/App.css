@@ -1,0 +1,11 @@
+.mindmapContainer {
+  width: 1280px;
+  height: 720px;
+  background-color: blue;
+}
+.centering {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
