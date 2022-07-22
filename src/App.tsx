@@ -1,10 +1,10 @@
-import { FC, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import "./App.css";
 import { Mindmapr } from "./mindmapr/Mindmapr";
 
 interface MindmapData {
-  id: String | number;
-  name: String;
+  id: string | number;
+  name: string;
   children: MindmapData[];
 }
 
@@ -16,7 +16,29 @@ export const App: FC = () => {
       {
         id: 1,
         name: "first child",
-        children: [],
+        children: [
+          {
+            id: 7,
+            name: "1-1",
+            children: [],
+          },
+          {
+            id: 8,
+            name: "1-2",
+            children: [
+              {
+                id: 9,
+                name: "1-2-1",
+                children: [],
+              },
+              {
+                id: 10,
+                name: "1-2-2",
+                children: [],
+              },
+            ],
+          },
+        ],
       },
       {
         id: 2,
@@ -50,10 +72,18 @@ export const App: FC = () => {
     setData(changedData);
   };
 
+  const renderItem = (item: MindmapData): ReactNode => {
+    return <div className="mindmaprItem">{item.name}</div>;
+  };
+
   return (
     <div className="centering">
       <div className="mindmapContainer">
-        <Mindmapr items={data} onChange={handleChange} />
+        <Mindmapr
+          items={data}
+          onChange={handleChange}
+          renderItem={renderItem}
+        />
       </div>
     </div>
   );

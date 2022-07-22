@@ -1,0 +1,22 @@
+.mindmaprContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.centerItem {
+}
+
+.rightContainer{
+    margin-left: 15px;
+}
+
+.leftContainer{
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
