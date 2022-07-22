@@ -63,7 +63,34 @@ export const App: FC = () => {
       {
         id: 6,
         name: "sixth child",
-        children: [],
+        children: [
+          {
+            id: 11,
+            name: "6-1",
+            children: [],
+          },
+          {
+            id: 12,
+            name: "6-2",
+            children: [
+              {
+                id: 14,
+                name: "6-2-1",
+                children: [],
+              },
+              {
+                id: 15,
+                name: "6-2-2",
+                children: [],
+              },
+            ],
+          },
+          {
+            id: 13,
+            name: "6-3",
+            children: [],
+          },
+        ],
       },
     ],
   });

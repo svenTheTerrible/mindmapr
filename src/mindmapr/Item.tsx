@@ -1,6 +1,7 @@
 import { HasIdAndChildren } from "./Mindmapr";
 import { ReactNode } from "react";
 import { ItemGroup } from "./ItemGroup";
+import "./Item.css";
 
 interface ItemProps<T extends HasIdAndChildren> {
   item: T;
@@ -14,7 +15,7 @@ export const Item = <T extends HasIdAndChildren>({
   side,
 }: ItemProps<T>) => {
   return (
-    <table>
+    <table className={side === "left" ? "leftItem" : "rightItem"}>
       <tbody>
         <tr>
           <td>
