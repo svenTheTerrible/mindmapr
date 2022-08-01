@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import { ItemGroup } from "./ItemGroup";
 import "./Mindmapr.css";
 import { splitItemsToLeftAndRight } from "./util";
@@ -19,6 +19,10 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   onChange,
   renderItem,
 }: MindmaprProps<T>) => {
+  const [centerItemRef, setCenterItemRef] = useState<HTMLDivElement | null>(
+    null
+  );
+
   const { leftItems, rightItems } = useMemo(() => {
     return splitItemsToLeftAndRight(items.children) as {
       leftItems: T[];
@@ -29,11 +33,23 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   return (
     <div className="mindmaprContainer">
       <div className="leftContainer">
-        <ItemGroup items={leftItems} side="left" renderItem={renderItem} />
+        <ItemGroup
+          parentRef={centerItemRef}
+          items={leftItems}
+          side="left"
+          renderItem={renderItem}
+        />
       </div>
-      <div className="centerItem">{renderItem(items)}</div>
+      <div className="centerItem" ref={(ref) => setCenterItemRef(ref)}>
+        {renderItem(items)}
+      </div>
       <div className="rightContainer">
-        <ItemGroup items={rightItems} side="right" renderItem={renderItem} />
+        <ItemGroup
+          parentRef={centerItemRef}
+          items={rightItems}
+          side="right"
+          renderItem={renderItem}
+        />
       </div>
     </div>
   );

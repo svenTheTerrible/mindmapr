@@ -1,9 +1,9 @@
 .leftItem {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .rightItem {
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
 }

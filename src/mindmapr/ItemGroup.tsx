@@ -6,17 +6,25 @@ interface ItemGroupProps<T extends HasIdAndChildren> {
   items: T[];
   side: "left" | "right";
   renderItem: (data: T) => ReactNode;
+  parentRef: HTMLDivElement | null;
 }
 
 export const ItemGroup = <T extends HasIdAndChildren>({
   items,
   side,
   renderItem,
+  parentRef,
 }: ItemGroupProps<T>) => {
   return (
     <>
       {items.map((item) => (
-        <Item item={item} renderItem={renderItem} side={side} key={item.id} />
+        <Item
+          item={item}
+          parentRef={parentRef}
+          renderItem={renderItem}
+          side={side}
+          key={item.id}
+        />
       ))}
     </>
   );
