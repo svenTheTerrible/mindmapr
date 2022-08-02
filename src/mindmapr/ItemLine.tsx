@@ -119,6 +119,45 @@ export const ItemLine: FC<ItemLineProps> = ({ itemRef, parentRef }) => {
       };
     }
 
+    //left _
+    if (itemCenter.y === parentCenter.y && itemCenter.x < parentCenter.x) {
+      const svgHeight = 5;
+      const svgWidth =
+        Math.abs(parentCenter.x - itemCenter.x) - itemCoords.width / 2;
+
+      return {
+        height: svgHeight,
+        width: svgWidth,
+        left: undefined,
+        right: -svgWidth,
+        top: itemCoords.height / 2 - svgHeight / 2,
+        bottom: undefined,
+        x1: 0,
+        y1: svgHeight / 2,
+        x2: svgWidth,
+        y2: svgHeight / 2,
+      };
+    }
+
+    //right _
+    if (itemCenter.y === parentCenter.y && itemCenter.x > parentCenter.x) {
+      const svgHeight = 5;
+      const svgWidth =
+        Math.abs(parentCenter.x - itemCenter.x) - itemCoords.width / 2;
+      return {
+        height: svgHeight,
+        width: svgWidth,
+        left: -svgWidth,
+        right: undefined,
+        top: itemCoords.height / 2 - svgHeight / 2,
+        bottom: undefined,
+        x1: 0,
+        y1: svgHeight / 2,
+        x2: svgWidth,
+        y2: svgHeight / 2,
+      };
+    }
+
     return {
       height: 0,
       left: 0,

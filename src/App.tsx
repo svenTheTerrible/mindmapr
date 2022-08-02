@@ -43,7 +43,13 @@ export const App: FC = () => {
       {
         id: 2,
         name: "second child",
-        children: [],
+        children: [
+          {
+            id: 17,
+            name: "2-1",
+            children: [],
+          },
+        ],
       },
       {
         id: 3,
@@ -53,7 +59,13 @@ export const App: FC = () => {
       {
         id: 4,
         name: "fourth child",
-        children: [],
+        children: [
+          {
+            id: 16,
+            name: "4-1",
+            children: [],
+          },
+        ],
       },
       {
         id: 5,
