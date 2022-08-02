@@ -6,9 +6,10 @@ import { ItemLine } from "./ItemLine";
 
 interface ItemProps<T extends HasIdAndChildren> {
   item: T;
-  renderItem: (item: T) => ReactNode;
+  renderItem: (item: T, depth: number) => ReactNode;
   side: "left" | "right";
   parentRef: HTMLDivElement | null;
+  depth: number;
 }
 
 export const Item = <T extends HasIdAndChildren>({
@@ -16,6 +17,7 @@ export const Item = <T extends HasIdAndChildren>({
   renderItem,
   side,
   parentRef,
+  depth,
 }: ItemProps<T>) => {
   const [newParentRef, setNewParentRef] = useState<HTMLDivElement | null>(null);
 
@@ -34,12 +36,13 @@ export const Item = <T extends HasIdAndChildren>({
                 items={item.children as T[]}
                 renderItem={renderItem}
                 side={side}
+                depth={depth + 1}
               />
             ) : (
               <div style={{ position: "relative" }} ref={setRef}>
                 <ItemLine itemRef={newParentRef} parentRef={parentRef} />
                 <div style={{ position: "relative", zIndex: 2 }}>
-                  {renderItem(item)}
+                  {renderItem(item, depth)}
                 </div>
               </div>
             )}
@@ -49,7 +52,7 @@ export const Item = <T extends HasIdAndChildren>({
               <div style={{ position: "relative" }} ref={setRef}>
                 <ItemLine itemRef={newParentRef} parentRef={parentRef} />
                 <div style={{ position: "relative", zIndex: 2 }}>
-                  {renderItem(item)}
+                  {renderItem(item, depth)}
                 </div>
               </div>
             ) : (
@@ -58,6 +61,7 @@ export const Item = <T extends HasIdAndChildren>({
                 items={item.children as T[]}
                 renderItem={renderItem}
                 side={side}
+                depth={depth + 1}
               />
             )}
           </td>

@@ -11,7 +11,7 @@ export interface HasIdAndChildren {
 interface MindmaprProps<T extends HasIdAndChildren> {
   items: T;
   onChange: (data: T) => void;
-  renderItem: (data: T) => ReactNode;
+  renderItem: (data: T, depth: number) => ReactNode;
 }
 
 export const Mindmapr = <T extends HasIdAndChildren>({
@@ -38,10 +38,11 @@ export const Mindmapr = <T extends HasIdAndChildren>({
           items={leftItems}
           side="left"
           renderItem={renderItem}
+          depth={1}
         />
       </div>
       <div className="centerItem" ref={(ref) => setCenterItemRef(ref)}>
-        {renderItem(items)}
+        {renderItem(items, 0)}
       </div>
       <div className="rightContainer">
         <ItemGroup
@@ -49,6 +50,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
           items={rightItems}
           side="right"
           renderItem={renderItem}
+          depth={1}
         />
       </div>
     </div>

@@ -111,7 +111,7 @@ export const App: FC = () => {
     setData(changedData);
   };
 
-  const renderItem = (item: MindmapData): ReactNode => {
+  const renderItem = (item: MindmapData, depth: number): ReactNode => {
     return <div className="mindmaprItem">{item.name}</div>;
   };
 
