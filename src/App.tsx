@@ -112,7 +112,19 @@ export const App: FC = () => {
   };
 
   const renderItem = (item: MindmapData, depth: number): ReactNode => {
-    return <div className="mindmaprItem">{item.name}</div>;
+    if (depth === 0) {
+      return <div className="centerMindmaprItem">{item.name}</div>;
+    }
+
+    if (depth === 1) {
+      return <div className="firstLevelMindmaprItem">{item.name}</div>;
+    }
+
+    if (depth === 2) {
+      return <div className="secondLevelMindmaprItem">{item.name}</div>;
+    }
+
+    return <div className="thirdLevelMindmaprItem">{item.name}</div>;
   };
 
   return (
