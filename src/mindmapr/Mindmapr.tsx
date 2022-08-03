@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { ItemGroup } from "./ItemGroup";
 import "./Mindmapr.css";
-import { splitItemsToLeftAndRight } from "./util";
+import { findItemById, splitItemsToLeftAndRight } from "./util";
 import ClickAwayListener from "react-click-away-listener";
 
 export interface HasIdAndChildren {
@@ -17,6 +17,7 @@ interface MindmaprProps<T extends HasIdAndChildren> {
   items: T;
   onChange: (data: T) => void;
   itemsSelectable?: boolean;
+  allowSelectionChangeTroughKeyboard?: boolean;
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
 }
 
@@ -25,6 +26,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   onChange,
   renderItem,
   itemsSelectable,
+  allowSelectionChangeTroughKeyboard,
 }: MindmaprProps<T>) => {
   const [centerItemRef, setCenterItemRef] = useState<HTMLDivElement | null>(
     null
@@ -46,6 +48,89 @@ export const Mindmapr = <T extends HasIdAndChildren>({
       setSelectedItem(undefined);
     }
   }, [itemsSelectable, setSelectedItem]);
+
+  useEffect(() => {
+    const switchSelectionThroughKeypress = (e: KeyboardEvent) => {
+      if (!selectedItem || !allowSelectionChangeTroughKeyboard) {
+        return;
+      }
+
+      const selectedItemIsCenter = selectedItem === items.id;
+      const foundInLeftItems = findItemById(leftItems, selectedItem, items.id);
+      const foundInRightItems = findItemById(
+        rightItems,
+        selectedItem,
+        items.id
+      );
+
+      if (e.key === "ArrowDown") {
+        if (selectedItemIsCenter) {
+          return;
+        }
+        const lowerItem =
+          foundInLeftItems?.lowerElementId ?? foundInRightItems?.lowerElementId;
+        if (lowerItem) {
+          setSelectedItem(lowerItem);
+          return;
+        }
+      }
+
+      if (e.key === "ArrowLeft") {
+        if (selectedItemIsCenter && leftItems.length > 0) {
+          setSelectedItem(leftItems[0].id);
+          return;
+        }
+
+        if (foundInLeftItems && foundInLeftItems.childIds.length > 0) {
+          setSelectedItem(foundInLeftItems.childIds[0]);
+          return;
+        }
+
+        if (foundInRightItems) {
+          setSelectedItem(foundInRightItems.parentId);
+        }
+      }
+
+      if (e.key === "ArrowRight") {
+        if (selectedItemIsCenter && rightItems.length > 0) {
+          setSelectedItem(rightItems[0].id);
+          return;
+        }
+
+        if (foundInRightItems && foundInRightItems.childIds.length > 0) {
+          setSelectedItem(foundInRightItems.childIds[0]);
+          return;
+        }
+
+        if (foundInLeftItems) {
+          setSelectedItem(foundInLeftItems.parentId);
+        }
+      }
+
+      if (e.key === "ArrowUp") {
+        if (selectedItemIsCenter) {
+          return;
+        }
+        const upperItem =
+          foundInLeftItems?.upperElementId ?? foundInRightItems?.upperElementId;
+        if (upperItem) {
+          setSelectedItem(upperItem);
+          return;
+        }
+      }
+    };
+    window.addEventListener("keydown", switchSelectionThroughKeypress);
+    return () => {
+      window.removeEventListener("keydown", switchSelectionThroughKeypress);
+    };
+  }, [
+    allowSelectionChangeTroughKeyboard,
+    selectedItem,
+    setSelectedItem,
+    items,
+    leftItems,
+    rightItems,
+  ]);
 
   const selectCenterItem = () => {
     if (itemsSelectable) {

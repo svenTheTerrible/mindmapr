@@ -111,6 +111,10 @@ export const App: FC = () => {
     setData(changedData);
   };
 
+  const joinClassNames = (names: Array<string | undefined>): string => {
+    return names.filter((name) => name !== undefined).join(" ");
+  };
+
   const renderItem = (
     item: MindmapData,
     depth: number,
@@ -118,31 +122,51 @@ export const App: FC = () => {
   ): ReactNode => {
     if (depth === 0) {
       return (
-        <div className="centerMindmaprItem">
-          {item.name} {state.isSelected ? 1 : 0}
+        <div
+          className={joinClassNames([
+            "centerMindmaprItem",
+            state.isSelected ? "selected" : undefined,
+          ])}
+        >
+          {item.name}
         </div>
       );
     }
 
     if (depth === 1) {
       return (
-        <div className="firstLevelMindmaprItem">
-          {item.name} {state.isSelected ? 1 : 0}
+        <div
+          className={joinClassNames([
+            "firstLevelMindmaprItem",
+            state.isSelected ? "selected" : undefined,
+          ])}
+        >
+          {item.name}
         </div>
       );
     }
 
     if (depth === 2) {
       return (
-        <div className="secondLevelMindmaprItem">
-          {item.name} {state.isSelected ? 1 : 0}
+        <div
+          className={joinClassNames([
+            "secondLevelMindmaprItem",
+            state.isSelected ? "selected" : undefined,
+          ])}
+        >
+          {item.name}
         </div>
       );
     }
 
     return (
-      <div className="thirdLevelMindmaprItem">
-        {item.name} {state.isSelected ? 1 : 0}
+      <div
+        className={joinClassNames([
+          "thirdLevelMindmaprItem",
+          state.isSelected ? "selected" : undefined,
+        ])}
+      >
+        {item.name}
       </div>
     );
   };
@@ -152,7 +176,8 @@ export const App: FC = () => {
       <div className="mindmapContainer">
         <Mindmapr
           items={data}
-          itemsSelectable={false}
+          itemsSelectable={true}
+          allowSelectionChangeTroughKeyboard={true}
           onChange={handleChange}
           renderItem={renderItem}
         />
