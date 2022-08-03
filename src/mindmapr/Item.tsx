@@ -1,15 +1,18 @@
-import { HasIdAndChildren } from "./Mindmapr";
-import { ReactNode, useState } from "react";
+import { HasIdAndChildren, RenderItemState } from "./Mindmapr";
+import React, { ReactNode, useState } from "react";
 import { ItemGroup } from "./ItemGroup";
 import "./Item.css";
 import { ItemLine } from "./ItemLine";
 
 interface ItemProps<T extends HasIdAndChildren> {
   item: T;
-  renderItem: (item: T, depth: number) => ReactNode;
+  renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
   side: "left" | "right";
   parentRef: HTMLDivElement | null;
   depth: number;
+  selectedItem: string | number | undefined;
+  setSelectedItem: (value: string | number | undefined) => void;
+  itemsSelectable?: boolean;
 }
 
 export const Item = <T extends HasIdAndChildren>({
@@ -18,11 +21,20 @@ export const Item = <T extends HasIdAndChildren>({
   side,
   parentRef,
   depth,
+  selectedItem,
+  setSelectedItem,
+  itemsSelectable,
 }: ItemProps<T>) => {
   const [newParentRef, setNewParentRef] = useState<HTMLDivElement | null>(null);
 
   const setRef = (ref: HTMLDivElement): void => {
     setNewParentRef(ref);
+  };
+
+  const selectItem = (e: React.MouseEvent) => {
+    if (itemsSelectable) {
+      setSelectedItem(item.id);
+    }
   };
 
   return (
@@ -37,22 +49,35 @@ export const Item = <T extends HasIdAndChildren>({
                 renderItem={renderItem}
                 side={side}
                 depth={depth + 1}
+                selectedItem={selectedItem}
+                setSelectedItem={setSelectedItem}
+                itemsSelectable={itemsSelectable}
               />
             ) : (
-              <div style={{ position: "relative" }} ref={setRef}>
+              <div className="itemWrapper" ref={setRef}>
                 <ItemLine itemRef={newParentRef} parentRef={parentRef} />
-                <div style={{ position: "relative", zIndex: 2 }}>
-                  {renderItem(item, depth)}
+                <div
+                  style={{ position: "relative", zIndex: 2 }}
+                  onClick={selectItem}
+                >
+                  {renderItem(item, depth, {
+                    isSelected: item.id === selectedItem,
+                  })}
                 </div>
               </div>
             )}
           </td>
           <td>
             {side === "left" ? (
-              <div style={{ position: "relative" }} ref={setRef}>
+              <div className="itemWrapper" ref={setRef}>
                 <ItemLine itemRef={newParentRef} parentRef={parentRef} />
-                <div style={{ position: "relative", zIndex: 2 }}>
-                  {renderItem(item, depth)}
+                <div
+                  style={{ position: "relative", zIndex: 2 }}
+                  onClick={selectItem}
+                >
+                  {renderItem(item, depth, {
+                    isSelected: item.id === selectedItem,
+                  })}
                 </div>
               </div>
             ) : (
@@ -62,6 +87,9 @@ export const Item = <T extends HasIdAndChildren>({
                 renderItem={renderItem}
                 side={side}
                 depth={depth + 1}
+                selectedItem={selectedItem}
+                setSelectedItem={setSelectedItem}
+                itemsSelectable={itemsSelectable}
               />
             )}
           </td>

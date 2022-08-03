@@ -1,6 +1,6 @@
 import { FC, ReactNode, useState } from "react";
 import "./App.css";
-import { Mindmapr } from "./mindmapr/Mindmapr";
+import { Mindmapr, RenderItemState } from "./mindmapr/Mindmapr";
 
 interface MindmapData {
   id: string | number;
@@ -111,20 +111,40 @@ export const App: FC = () => {
     setData(changedData);
   };
 
-  const renderItem = (item: MindmapData, depth: number): ReactNode => {
+  const renderItem = (
+    item: MindmapData,
+    depth: number,
+    state: RenderItemState
+  ): ReactNode => {
     if (depth === 0) {
-      return <div className="centerMindmaprItem">{item.name}</div>;
+      return (
+        <div className="centerMindmaprItem">
+          {item.name} {state.isSelected ? 1 : 0}
+        </div>
+      );
     }
 
     if (depth === 1) {
-      return <div className="firstLevelMindmaprItem">{item.name}</div>;
+      return (
+        <div className="firstLevelMindmaprItem">
+          {item.name} {state.isSelected ? 1 : 0}
+        </div>
+      );
     }
 
     if (depth === 2) {
-      return <div className="secondLevelMindmaprItem">{item.name}</div>;
+      return (
+        <div className="secondLevelMindmaprItem">
+          {item.name} {state.isSelected ? 1 : 0}
+        </div>
+      );
     }
 
-    return <div className="thirdLevelMindmaprItem">{item.name}</div>;
+    return (
+      <div className="thirdLevelMindmaprItem">
+        {item.name} {state.isSelected ? 1 : 0}
+      </div>
+    );
   };
 
   return (
@@ -132,6 +152,7 @@ export const App: FC = () => {
       <div className="mindmapContainer">
         <Mindmapr
           items={data}
+          itemsSelectable={false}
           onChange={handleChange}
           renderItem={renderItem}
         />
