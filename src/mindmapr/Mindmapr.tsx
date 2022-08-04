@@ -132,7 +132,9 @@ export const Mindmapr = <T extends HasIdAndChildren>({
     rightItems,
   ]);
 
-  const selectCenterItem = () => {
+  const selectCenterItem = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (itemsSelectable) {
       setSelectedItem(items.id);
     }
@@ -144,7 +146,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
 
   return (
     <ClickAwayListener onClickAway={clearSelectedItem}>
-      <div className="mindmaprContainer">
+      <div className="mindmaprContainer" onClick={clearSelectedItem}>
         <div className="leftContainer">
           <ItemGroup
             parentRef={centerItemRef}

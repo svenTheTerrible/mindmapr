@@ -32,6 +32,8 @@ export const Item = <T extends HasIdAndChildren>({
   };
 
   const selectItem = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (itemsSelectable) {
       setSelectedItem(item.id);
     }
