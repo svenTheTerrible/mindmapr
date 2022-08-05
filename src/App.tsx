@@ -1,8 +1,9 @@
 import { FC, ReactNode, useState } from "react";
 import "./App.css";
+import { MindmapItem } from "./MindmapItem";
 import { Mindmapr, RenderItemState } from "./mindmapr/Mindmapr";
 
-interface MindmapData {
+export interface MindmapData {
   id: string | number;
   name: string;
   children: MindmapData[];
@@ -111,64 +112,12 @@ export const App: FC = () => {
     setData(changedData);
   };
 
-  const joinClassNames = (names: Array<string | undefined>): string => {
-    return names.filter((name) => name !== undefined).join(" ");
-  };
-
   const renderItem = (
     item: MindmapData,
     depth: number,
     state: RenderItemState
   ): ReactNode => {
-    if (depth === 0) {
-      return (
-        <div
-          className={joinClassNames([
-            "centerMindmaprItem",
-            state.isSelected ? "selected" : undefined,
-          ])}
-        >
-          {item.name}
-        </div>
-      );
-    }
-
-    if (depth === 1) {
-      return (
-        <div
-          className={joinClassNames([
-            "firstLevelMindmaprItem",
-            state.isSelected ? "selected" : undefined,
-          ])}
-        >
-          {item.name}
-        </div>
-      );
-    }
-
-    if (depth === 2) {
-      return (
-        <div
-          className={joinClassNames([
-            "secondLevelMindmaprItem",
-            state.isSelected ? "selected" : undefined,
-          ])}
-        >
-          {item.name}
-        </div>
-      );
-    }
-
-    return (
-      <div
-        className={joinClassNames([
-          "thirdLevelMindmaprItem",
-          state.isSelected ? "selected" : undefined,
-        ])}
-      >
-        {item.name}
-      </div>
-    );
+    return <MindmapItem data={item} depth={depth} state={state} />;
   };
 
   return (

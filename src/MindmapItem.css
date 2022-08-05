@@ -1,0 +1,35 @@
+.centerMindmaprItem{
+    transition: 0.2s;
+    background-color:rgb(0, 157, 209);
+    color: white;
+    border-radius: 12px;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+  .firstLevelMindmaprItem{
+    transition: 0.2s;
+    background-color: rgb(70, 190, 230);
+    border-radius: 12px;
+    padding: 15px;
+  }
+  
+  .secondLevelMindmaprItem{
+    transition: 0.2s;
+    background-color: rgb(126, 214, 243);
+    border-radius: 12px;
+    padding: 8px;
+  }
+  
+  .thirdLevelMindmaprItem{
+    transition: 0.2s;
+    padding: 4px;
+    background-color: rgb(181, 224, 238);
+    border-radius: 12px;
+  }
+  
+  .selected{
+    background-color: orange;
+    color: #fff;
+  }
