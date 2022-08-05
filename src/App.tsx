@@ -2,6 +2,7 @@ import { FC, ReactNode, useState } from "react";
 import "./App.css";
 import { MindmapItem } from "./MindmapItem";
 import { Mindmapr, RenderItemState } from "./mindmapr/Mindmapr";
+import { findMindmapElementById } from "./util";
 
 export interface MindmapData {
   id: string | number;
@@ -108,6 +109,16 @@ export const App: FC = () => {
     ],
   });
 
+  const changeItemText = (id: string | number, name: string): void => {
+    setData((current) => {
+      const entryToUpdate = findMindmapElementById(current, id);
+      if (entryToUpdate) {
+        entryToUpdate.name = name;
+      }
+      return current;
+    });
+  };
+
   const handleChange = (changedData: MindmapData) => {
     setData(changedData);
   };
@@ -117,7 +128,14 @@ export const App: FC = () => {
     depth: number,
     state: RenderItemState
   ): ReactNode => {
-    return <MindmapItem data={item} depth={depth} state={state} />;
+    return (
+      <MindmapItem
+        data={item}
+        depth={depth}
+        state={state}
+        changeItemText={changeItemText}
+      />
+    );
   };
 
   return (
