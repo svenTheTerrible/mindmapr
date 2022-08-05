@@ -119,10 +119,6 @@ export const App: FC = () => {
     });
   };
 
-  const handleChange = (changedData: MindmapData) => {
-    setData(changedData);
-  };
-
   const renderItem = (
     item: MindmapData,
     depth: number,
@@ -145,7 +141,6 @@ export const App: FC = () => {
           items={data}
           itemsSelectable={true}
           allowSelectionChangeTroughKeyboard={true}
-          onChange={handleChange}
           renderItem={renderItem}
         />
       </div>

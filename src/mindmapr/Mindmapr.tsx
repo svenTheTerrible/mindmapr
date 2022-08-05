@@ -15,7 +15,6 @@ export interface RenderItemState {
 
 interface MindmaprProps<T extends HasIdAndChildren> {
   items: T;
-  onChange: (data: T) => void;
   itemsSelectable?: boolean;
   allowSelectionChangeTroughKeyboard?: boolean;
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
@@ -23,7 +22,6 @@ interface MindmaprProps<T extends HasIdAndChildren> {
 
 export const Mindmapr = <T extends HasIdAndChildren>({
   items,
-  onChange,
   renderItem,
   itemsSelectable,
   allowSelectionChangeTroughKeyboard,
