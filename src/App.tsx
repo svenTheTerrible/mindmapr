@@ -2,7 +2,9 @@ import { FC, ReactNode, useState } from "react";
 import "./App.css";
 import { MindmapItem } from "./MindmapItem";
 import { Mindmapr, RenderItemState } from "./mindmapr/Mindmapr";
-import { findMindmapElementById } from "./util";
+import { findMindmapElementById, findParentElementById } from "./util";
+import uniqid from "uniqid";
+import _ from "lodash";
 
 export interface MindmapData {
   id: string | number;
@@ -119,6 +121,34 @@ export const App: FC = () => {
     });
   };
 
+  const addChildItem = (parentId: string | number): void => {
+    setData((current) => {
+      const entryToUpdate = findMindmapElementById(current, parentId);
+      if (entryToUpdate) {
+        entryToUpdate.children.push({
+          id: uniqid(),
+          name: "new-child",
+          children: [],
+        });
+      }
+      return _.cloneDeep(current);
+    });
+  };
+
+  const addChildOnParentLevel = (parentId: string | number): void => {
+    setData((current) => {
+      const entryToUpdate = findParentElementById(current, parentId);
+      if (entryToUpdate) {
+        entryToUpdate.children.push({
+          id: uniqid(),
+          name: "new-child",
+          children: [],
+        });
+      }
+      return _.cloneDeep(current);
+    });
+  };
+
   const renderItem = (
     item: MindmapData,
     depth: number,
@@ -130,6 +160,8 @@ export const App: FC = () => {
         depth={depth}
         state={state}
         changeItemText={changeItemText}
+        addChildItem={addChildItem}
+        addChildOnParentLevel={addChildOnParentLevel}
       />
     );
   };
