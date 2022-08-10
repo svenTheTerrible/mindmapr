@@ -1,14 +1,19 @@
 import { HasIdAndChildren, RenderItemState } from "./Mindmapr";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { ItemGroup } from "./ItemGroup";
 import "./Item.css";
-import { ItemLine } from "./ItemLine";
+import { generateChildParentId } from "./util";
 
 interface ItemProps<T extends HasIdAndChildren> {
   item: T;
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
   side: "left" | "right";
   parentRef: HTMLDivElement | null;
+  parentId: string | number;
+  addParentChildRefWithId: (
+    id: string,
+    value: [HTMLDivElement, HTMLDivElement]
+  ) => void;
   depth: number;
   selectedItem: string | number | undefined;
   setSelectedItem: (value: string | number | undefined) => void;
@@ -24,8 +29,19 @@ export const Item = <T extends HasIdAndChildren>({
   selectedItem,
   setSelectedItem,
   itemsSelectable,
+  parentId,
+  addParentChildRefWithId,
 }: ItemProps<T>) => {
   const [newParentRef, setNewParentRef] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (parentRef && newParentRef) {
+      addParentChildRefWithId(generateChildParentId(parentId, item.id), [
+        parentRef,
+        newParentRef,
+      ]);
+    }
+  }, [parentRef, newParentRef, parentId, item.id, addParentChildRefWithId]);
 
   const setRef = (ref: HTMLDivElement): void => {
     setNewParentRef(ref);
@@ -47,6 +63,8 @@ export const Item = <T extends HasIdAndChildren>({
             {side === "left" ? (
               <ItemGroup
                 parentRef={newParentRef}
+                parentId={item.id}
+                addParentChildRefWithId={addParentChildRefWithId}
                 items={item.children as T[]}
                 renderItem={renderItem}
                 side={side}
@@ -57,7 +75,6 @@ export const Item = <T extends HasIdAndChildren>({
               />
             ) : (
               <div className="itemWrapper" ref={setRef}>
-                <ItemLine itemRef={newParentRef} parentRef={parentRef} />
                 <div
                   style={{ position: "relative", zIndex: 2 }}
                   onClick={selectItem}
@@ -72,7 +89,6 @@ export const Item = <T extends HasIdAndChildren>({
           <td>
             {side === "left" ? (
               <div className="itemWrapper" ref={setRef}>
-                <ItemLine itemRef={newParentRef} parentRef={parentRef} />
                 <div
                   style={{ position: "relative", zIndex: 2 }}
                   onClick={selectItem}
@@ -85,6 +101,8 @@ export const Item = <T extends HasIdAndChildren>({
             ) : (
               <ItemGroup
                 parentRef={newParentRef}
+                parentId={item.id}
+                addParentChildRefWithId={addParentChildRefWithId}
                 items={item.children as T[]}
                 renderItem={renderItem}
                 side={side}

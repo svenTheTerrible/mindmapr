@@ -7,6 +7,11 @@ interface ItemGroupProps<T extends HasIdAndChildren> {
   side: "left" | "right";
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
   parentRef: HTMLDivElement | null;
+  parentId: string | number;
+  addParentChildRefWithId: (
+    id: string,
+    value: [HTMLDivElement, HTMLDivElement]
+  ) => void;
   depth: number;
   selectedItem: string | number | undefined;
   setSelectedItem: (value: string | number | undefined) => void;
