@@ -18,15 +18,16 @@ export const findMindmapElementById = <T extends HasIdAndChildren>(
 
 export const findParentElementById = <T extends HasIdAndChildren>(
   items: T,
-  id: string | number
+  id: string | number,
+  parent?: T
 ): T | undefined => {
   if (items.id === id) {
-    return undefined;
+    return parent;
   }
   for (let i = 0; i < items.children.length; i++) {
-    const result = findMindmapElementById(items.children[i], id);
+    const result = findParentElementById(items.children[i], id, items);
     if (result) {
-      return items;
+      return result as T;
     }
   }
   return undefined;
