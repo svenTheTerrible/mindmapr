@@ -8,8 +8,6 @@ interface MindmapItemProps {
   data: MindmapData;
   state: RenderItemState;
   changeItemText: (id: string | number, name: string) => void;
-  addChildItem: (parentId: string | number) => void;
-  addChildOnParentLevel: (parentId: string | number) => void;
 }
 
 const depthClasses = [
@@ -35,36 +33,8 @@ export const MindmapItem: FC<MindmapItemProps> = ({
   data,
   state,
   changeItemText,
-  addChildItem,
-  addChildOnParentLevel,
 }) => {
   const [inputValue, setInputValue] = useState<string | undefined>();
-
-  useEffect(() => {
-    const handleKeydown = (e: KeyboardEvent): void => {
-      if (!state.isSelected) {
-        return;
-      }
-
-      if (e.key === "Tab") {
-        e.preventDefault();
-        e.stopPropagation();
-        addChildItem(data.id);
-        return;
-      }
-
-      if (e.key === "Enter") {
-        e.preventDefault();
-        e.stopPropagation();
-        addChildOnParentLevel(data.id);
-        return;
-      }
-    };
-    document.addEventListener("keydown", handleKeydown);
-    return () => {
-      document.removeEventListener("keydown", handleKeydown);
-    };
-  }, [addChildItem, data.id, state, addChildOnParentLevel]);
 
   const enableEditing = () => {
     if (!state.isSelected) {

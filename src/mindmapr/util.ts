@@ -1,5 +1,6 @@
 import { LineProps } from "./ItemLine";
 import { HasIdAndChildren } from "./Mindmapr";
+import _ from "lodash";
 
 interface Coords {
   x: number;
@@ -194,4 +195,69 @@ export const calculateLineAndSvgCoords = (
     y1: 0,
     y2: 0,
   };
+};
+
+export const findMindmapElementById = <T extends HasIdAndChildren>(
+  items: T,
+  id: string | number
+): T | undefined => {
+  if (items.id === id) {
+    return items;
+  }
+  for (let i = 0; i < items.children.length; i++) {
+    const result = findMindmapElementById(items.children[i], id);
+    if (result) {
+      return result as T;
+    }
+  }
+  return undefined;
+};
+
+export const findParentElementById = <T extends HasIdAndChildren>(
+  items: T,
+  id: string | number,
+  parent?: T
+): T | undefined => {
+  if (items.id === id) {
+    return parent;
+  }
+  for (let i = 0; i < items.children.length; i++) {
+    const result = findParentElementById(items.children[i], id, items);
+    if (result) {
+      return result as T;
+    }
+  }
+  return undefined;
+};
+
+export const addOnChildLevel = <T extends HasIdAndChildren>(
+  parentId: string | number,
+  items: T,
+  createNewItem: (parent: T) => T
+): { item: T; newItemId?: string | number } => {
+  const itemClone = _.cloneDeep(items);
+  const entryToUpdate = findMindmapElementById(itemClone, parentId);
+  let newItemId = undefined;
+  if (entryToUpdate) {
+    const newItem = createNewItem(entryToUpdate);
+    newItemId = newItem.id;
+    entryToUpdate.children.push(newItem);
+  }
+  return { item: itemClone, newItemId };
+};
+
+export const addOnParentLevel = <T extends HasIdAndChildren>(
+  parentId: string | number,
+  items: T,
+  createNewItem: (parent: T) => T
+): { item: T; newItemId?: string | number } => {
+  const itemClone = _.cloneDeep(items);
+  const entryToUpdate = findParentElementById(itemClone, parentId);
+  let newItemId = undefined;
+  if (entryToUpdate) {
+    const newItem = createNewItem(entryToUpdate);
+    newItemId = newItem.id;
+    entryToUpdate.children.push(newItem);
+  }
+  return { item: itemClone, newItemId };
 };

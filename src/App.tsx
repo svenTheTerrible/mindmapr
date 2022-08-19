@@ -2,9 +2,8 @@ import { FC, ReactNode, useState } from "react";
 import "./App.css";
 import { MindmapItem } from "./MindmapItem";
 import { Mindmapr, RenderItemState } from "./mindmapr/Mindmapr";
-import { findMindmapElementById, findParentElementById } from "./util";
 import uniqid from "uniqid";
-import _ from "lodash";
+import { findMindmapElementById } from "./mindmapr/util";
 
 export interface MindmapData {
   id: string | number;
@@ -121,34 +120,6 @@ export const App: FC = () => {
     });
   };
 
-  const addChildItem = (parentId: string | number): void => {
-    setData((current) => {
-      const entryToUpdate = findMindmapElementById(current, parentId);
-      if (entryToUpdate) {
-        entryToUpdate.children.push({
-          id: uniqid(),
-          name: "new-child",
-          children: [],
-        });
-      }
-      return _.cloneDeep(current);
-    });
-  };
-
-  const addChildOnParentLevel = (parentId: string | number): void => {
-    setData((current) => {
-      const entryToUpdate = findParentElementById(current, parentId);
-      if (entryToUpdate) {
-        entryToUpdate.children.push({
-          id: uniqid(),
-          name: "new-child",
-          children: [],
-        });
-      }
-      return _.cloneDeep(current);
-    });
-  };
-
   const renderItem = (
     item: MindmapData,
     depth: number,
@@ -160,10 +131,16 @@ export const App: FC = () => {
         depth={depth}
         state={state}
         changeItemText={changeItemText}
-        addChildItem={addChildItem}
-        addChildOnParentLevel={addChildOnParentLevel}
       />
     );
+  };
+
+  const createNewItem = (parent: MindmapData): MindmapData => {
+    return {
+      id: uniqid(),
+      children: [],
+      name: "new child",
+    };
   };
 
   return (
@@ -171,6 +148,8 @@ export const App: FC = () => {
       <div className="mindmapContainer">
         <Mindmapr
           items={data}
+          setData={setData}
+          createNewItem={createNewItem}
           itemsSelectable={true}
           allowSelectionChangeTroughKeyboard={true}
           renderItem={renderItem}

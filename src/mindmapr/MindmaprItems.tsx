@@ -1,10 +1,17 @@
 import { useEffect, useMemo, useState, ReactNode, memo } from "react";
 import { ItemGroup } from "./ItemGroup";
 import { HasIdAndChildren, RenderItemState } from "./Mindmapr";
-import { findItemById, splitItemsToLeftAndRight } from "./util";
+import {
+  addOnChildLevel,
+  addOnParentLevel,
+  findItemById,
+  splitItemsToLeftAndRight,
+} from "./util";
 
 interface MindmaprItemsProps<T extends HasIdAndChildren> {
   items: T;
+  setData: (items: T) => void;
+  createNewItem: (parent: T) => T;
   itemsSelectable?: boolean;
   allowSelectionChangeTroughKeyboard?: boolean;
   selectedItem?: string | number;
@@ -18,6 +25,8 @@ interface MindmaprItemsProps<T extends HasIdAndChildren> {
 
 export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   items,
+  setData,
+  createNewItem,
   renderItem,
   allowSelectionChangeTroughKeyboard,
   itemsSelectable,
@@ -57,6 +66,8 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
       );
 
       if (e.key === "ArrowDown") {
+        e.preventDefault();
+        e.stopImmediatePropagation();
         if (selectedItemIsCenter) {
           return;
         }
@@ -69,6 +80,8 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
       }
 
       if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        e.stopImmediatePropagation();
         if (selectedItemIsCenter && leftItems.length > 0) {
           setSelectedItem(leftItems[0].id);
           return;
@@ -85,6 +98,8 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
       }
 
       if (e.key === "ArrowRight") {
+        e.preventDefault();
+        e.stopImmediatePropagation();
         if (selectedItemIsCenter && rightItems.length > 0) {
           setSelectedItem(rightItems[0].id);
           return;
@@ -101,6 +116,8 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
       }
 
       if (e.key === "ArrowUp") {
+        e.preventDefault();
+        e.stopImmediatePropagation();
         if (selectedItemIsCenter) {
           return;
         }
@@ -111,6 +128,32 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
           return;
         }
       }
+
+      if (e.key === "Tab") {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const { item: newItems, newItemId } = addOnChildLevel(
+          selectedItem,
+          items,
+          createNewItem
+        );
+        setSelectedItem(newItemId);
+        setData(newItems);
+        return;
+      }
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const { item: newItems, newItemId } = addOnParentLevel(
+          selectedItem,
+          items,
+          createNewItem
+        );
+        setSelectedItem(newItemId);
+        setData(newItems);
+        return;
+      }
     };
     window.addEventListener("keydown", switchSelectionThroughKeypress);
     return () => {
@@ -120,7 +163,9 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
     allowSelectionChangeTroughKeyboard,
     selectedItem,
     setSelectedItem,
+    createNewItem,
     items,
+    setData,
     leftItems,
     rightItems,
   ]);
