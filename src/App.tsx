@@ -135,7 +135,7 @@ export const App: FC = () => {
     );
   };
 
-  const createNewItem = (parent: MindmapData): MindmapData => {
+  const createNewItem = (parent: MindmapData): MindmapData | undefined => {
     return {
       id: uniqid(),
       children: [],

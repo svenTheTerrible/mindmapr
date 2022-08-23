@@ -233,15 +233,17 @@ export const findParentElementById = <T extends HasIdAndChildren>(
 export const addOnChildLevel = <T extends HasIdAndChildren>(
   parentId: string | number,
   items: T,
-  createNewItem: (parent: T) => T
+  createNewItem: (parent: T) => T | undefined
 ): { item: T; newItemId?: string | number } => {
   const itemClone = _.cloneDeep(items);
   const entryToUpdate = findMindmapElementById(itemClone, parentId);
   let newItemId = undefined;
   if (entryToUpdate) {
     const newItem = createNewItem(entryToUpdate);
-    newItemId = newItem.id;
-    entryToUpdate.children.push(newItem);
+    newItemId = newItem?.id;
+    if (newItem) {
+      entryToUpdate.children.push(newItem);
+    }
   }
   return { item: itemClone, newItemId };
 };
@@ -249,15 +251,17 @@ export const addOnChildLevel = <T extends HasIdAndChildren>(
 export const addOnParentLevel = <T extends HasIdAndChildren>(
   parentId: string | number,
   items: T,
-  createNewItem: (parent: T) => T
+  createNewItem: (parent: T) => T | undefined
 ): { item: T; newItemId?: string | number } => {
   const itemClone = _.cloneDeep(items);
   const entryToUpdate = findParentElementById(itemClone, parentId);
   let newItemId = undefined;
   if (entryToUpdate) {
     const newItem = createNewItem(entryToUpdate);
-    newItemId = newItem.id;
-    entryToUpdate.children.push(newItem);
+    newItemId = newItem?.id;
+    if (newItem) {
+      entryToUpdate.children.push(newItem);
+    }
   }
   return { item: itemClone, newItemId };
 };

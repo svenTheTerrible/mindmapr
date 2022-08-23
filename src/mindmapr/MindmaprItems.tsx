@@ -137,8 +137,10 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
           items,
           createNewItem
         );
-        setSelectedItem(newItemId);
-        setData(newItems);
+        if (newItemId) {
+          setSelectedItem(newItemId);
+          setData(newItems);
+        }
         return;
       }
 
@@ -150,8 +152,10 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
           items,
           createNewItem
         );
-        setSelectedItem(newItemId);
-        setData(newItems);
+        if (newItemId) {
+          setSelectedItem(newItemId);
+          setData(newItems);
+        }
         return;
       }
     };
