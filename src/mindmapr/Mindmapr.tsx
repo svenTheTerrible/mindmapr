@@ -17,6 +17,10 @@ interface MindmaprProps<T extends HasIdAndChildren> {
   items: T;
   addChildKey?: string;
   addChildOnParentLevelKey?: string;
+  overwriteOnSelectedItemKeydown?: (
+    selectedItem: string | number,
+    e: KeyboardEvent
+  ) => void;
   setData?: (items: T) => void;
   createNewItem?: (parent: T) => T | undefined;
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
@@ -27,6 +31,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   setData,
   createNewItem,
   renderItem,
+  overwriteOnSelectedItemKeydown,
   addChildKey = "Tab",
   addChildOnParentLevelKey = "Enter",
 }: MindmaprProps<T>) => {
@@ -54,6 +59,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
     <ClickAwayListener onClickAway={clearSelectedItem}>
       <div className="mindmaprContainer" onClick={clearSelectedItem}>
         <MindmaprItems
+          overwriteOnSelectedItemKeydown={overwriteOnSelectedItemKeydown}
           addChildKey={addChildKey}
           addChildOnParentLevelKey={addChildOnParentLevelKey}
           selectedItem={selectedItem}

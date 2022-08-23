@@ -13,6 +13,10 @@ interface MindmaprItemsProps<T extends HasIdAndChildren> {
   addChildKey: string;
   addChildOnParentLevelKey: string;
   setData?: (items: T) => void;
+  overwriteOnSelectedItemKeydown?: (
+    selectedItem: string | number,
+    e: KeyboardEvent
+  ) => void;
   createNewItem?: (parent: T) => T;
   selectedItem?: string | number;
   setSelectedItem: (value?: string | number) => void;
@@ -29,6 +33,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   createNewItem,
   renderItem,
   addParentChildRefWithId,
+  overwriteOnSelectedItemKeydown,
   selectedItem,
   setSelectedItem,
   addChildKey,
@@ -52,6 +57,11 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   useEffect(() => {
     const switchSelectionThroughKeypress = (e: KeyboardEvent) => {
       if (!selectedItem) {
+        return;
+      }
+
+      if (overwriteOnSelectedItemKeydown) {
+        overwriteOnSelectedItemKeydown(selectedItem, e);
         return;
       }
 
@@ -171,6 +181,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
     rightItems,
     addChildKey,
     addChildOnParentLevelKey,
+    overwriteOnSelectedItemKeydown,
   ]);
 
   const selectCenterItem = (e: React.MouseEvent) => {

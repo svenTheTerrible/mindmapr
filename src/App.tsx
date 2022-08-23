@@ -167,4 +167,3 @@ export const App: FC = () => {
 // convert project via react-create-lib
 // figure out plublishing on npm
 // write tests on util functions
-// onKeyDown overwrite for selection and adding children
