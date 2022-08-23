@@ -211,7 +211,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         />
       </div>
       <div
-        tabIndex={99}
+        tabIndex={-1}
         className="centerItem"
         ref={(ref) => setCenterItemRef(ref)}
         onClick={selectCenterItem}
