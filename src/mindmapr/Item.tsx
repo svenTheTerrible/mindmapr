@@ -50,6 +50,12 @@ export const Item = <T extends HasIdAndChildren>({
     depth,
   ]);
 
+  useEffect(() => {
+    if (selectedItem === item.id) {
+      newParentRef?.focus();
+    }
+  }, [selectedItem, newParentRef, item]);
+
   const setRef = (ref: HTMLDivElement): void => {
     setNewParentRef(ref);
   };
@@ -78,7 +84,7 @@ export const Item = <T extends HasIdAndChildren>({
                 setSelectedItem={setSelectedItem}
               />
             ) : (
-              <div className="itemWrapper" ref={setRef}>
+              <div tabIndex={-1} className="itemWrapper" ref={setRef}>
                 <div
                   style={{ position: "relative", zIndex: 2 }}
                   onClick={selectItem}
@@ -92,7 +98,7 @@ export const Item = <T extends HasIdAndChildren>({
           </td>
           <td>
             {side === "left" ? (
-              <div className="itemWrapper" ref={setRef}>
+              <div tabIndex={-1} className="itemWrapper" ref={setRef}>
                 <div
                   style={{ position: "relative", zIndex: 2 }}
                   onClick={selectItem}

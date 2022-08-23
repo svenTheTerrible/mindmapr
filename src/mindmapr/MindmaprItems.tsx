@@ -60,6 +60,12 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   }, [centerItemRef]);
 
   useEffect(() => {
+    if (selectedItem === items.id) {
+      centerItemRef?.focus();
+    }
+  }, [selectedItem, items, centerItemRef]);
+
+  useEffect(() => {
     const switchSelectionThroughKeypress = (e: KeyboardEvent) => {
       if (!selectedItem) {
         return;

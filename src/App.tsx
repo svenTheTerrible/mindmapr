@@ -159,7 +159,6 @@ export const App: FC = () => {
 
 //todo
 // when navigating via arrow key -> <-, select the nearest item first (mostly the middle item)
-// when focusing new item, focus it, so that it gets scrolled to
 // check performance on large mindmaps
 // allow mindmap to only add items on one side as a tree via prop
 // convert project via react-create-lib
