@@ -22,7 +22,8 @@ interface MindmaprItemsProps<T extends HasIdAndChildren> {
   setSelectedItem: (value?: string | number) => void;
   addParentChildRefWithId: (
     id: string,
-    value: [HTMLDivElement, HTMLDivElement]
+    value: [HTMLDivElement, HTMLDivElement],
+    depth: number
   ) => void;
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
 }

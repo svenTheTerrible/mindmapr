@@ -163,7 +163,6 @@ export const App: FC = () => {
 // check performance on large mindmaps
 // allow mindmap to only add items on one side as a tree via prop
 // make connection line thickness and color definable as a prop
-// check how to make unique classnames for libraries
 // convert project via react-create-lib
 // figure out plublishing on npm
 // write tests on util functions

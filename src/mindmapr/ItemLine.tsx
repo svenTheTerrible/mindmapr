@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { CSSProperties, FC } from "react";
 
 export interface LineProps {
   left: number | undefined;
@@ -11,7 +11,12 @@ export interface LineProps {
   y2: number;
 }
 
-export const ItemLine: FC<LineProps> = ({
+interface LinePropsExtras {
+  depth: number;
+  overwriteLineStyle?: (depth: number) => CSSProperties;
+}
+
+export const ItemLine: FC<LineProps & LinePropsExtras> = ({
   height,
   left,
   top,
@@ -20,7 +25,15 @@ export const ItemLine: FC<LineProps> = ({
   x2,
   y1,
   y2,
+  depth,
+  overwriteLineStyle,
 }) => {
+  const style = {
+    stroke: "#000",
+    strokeWidth: 1.5,
+    ...(overwriteLineStyle?.(depth) ?? {}),
+  };
+
   return (
     <svg
       style={{
@@ -31,13 +44,7 @@ export const ItemLine: FC<LineProps> = ({
       height={height}
       width={width}
     >
-      <line
-        x1={x1}
-        y1={y1}
-        x2={x2}
-        y2={y2}
-        style={{ stroke: "#000", strokeWidth: 1.5 }}
-      />
+      <line x1={x1} y1={y1} x2={x2} y2={y2} style={style} />
     </svg>
   );
 };

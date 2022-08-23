@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useState } from "react";
+import { CSSProperties, ReactNode, useCallback, useState } from "react";
 import "./Mindmapr.css";
 import ClickAwayListener from "react-click-away-listener";
 import ItemLines, { ParentChildRefWithId } from "./ItemLines";
@@ -21,6 +21,7 @@ interface MindmaprProps<T extends HasIdAndChildren> {
     selectedItem: string | number,
     e: KeyboardEvent
   ) => void;
+  overwriteLineStyle?: (depth: number) => CSSProperties;
   setData?: (items: T) => void;
   createNewItem?: (parent: T) => T | undefined;
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
@@ -34,6 +35,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   overwriteOnSelectedItemKeydown,
   addChildKey = "Tab",
   addChildOnParentLevelKey = "Enter",
+  overwriteLineStyle,
 }: MindmaprProps<T>) => {
   const [parentChildRefWithId, setParentChildRefWithId] =
     useState<ParentChildRefWithId>({});
@@ -47,9 +49,9 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   };
 
   const addParentChildRefWithId = useCallback(
-    (id: string, value: [HTMLDivElement, HTMLDivElement]) => {
+    (id: string, value: [HTMLDivElement, HTMLDivElement], depth: number) => {
       setParentChildRefWithId((current) => {
-        return { ...current, [id]: value };
+        return { ...current, [id]: [...value, depth] };
       });
     },
     [setParentChildRefWithId]
@@ -70,7 +72,10 @@ export const Mindmapr = <T extends HasIdAndChildren>({
           renderItem={renderItem as any}
           addParentChildRefWithId={addParentChildRefWithId}
         />
-        <ItemLines parentChildRefsWithId={parentChildRefWithId} />
+        <ItemLines
+          parentChildRefsWithId={parentChildRefWithId}
+          overwriteLineStyle={overwriteLineStyle}
+        />
       </div>
     </ClickAwayListener>
   );

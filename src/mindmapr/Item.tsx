@@ -12,7 +12,8 @@ interface ItemProps<T extends HasIdAndChildren> {
   parentId: string | number;
   addParentChildRefWithId: (
     id: string,
-    value: [HTMLDivElement, HTMLDivElement]
+    value: [HTMLDivElement, HTMLDivElement],
+    depth: number
   ) => void;
   depth: number;
   selectedItem: string | number | undefined;
@@ -34,12 +35,20 @@ export const Item = <T extends HasIdAndChildren>({
 
   useEffect(() => {
     if (parentRef && newParentRef) {
-      addParentChildRefWithId(generateChildParentId(parentId, item.id), [
-        parentRef,
-        newParentRef,
-      ]);
+      addParentChildRefWithId(
+        generateChildParentId(parentId, item.id),
+        [parentRef, newParentRef],
+        depth
+      );
     }
-  }, [parentRef, newParentRef, parentId, item.id, addParentChildRefWithId]);
+  }, [
+    parentRef,
+    newParentRef,
+    parentId,
+    item.id,
+    addParentChildRefWithId,
+    depth,
+  ]);
 
   const setRef = (ref: HTMLDivElement): void => {
     setNewParentRef(ref);

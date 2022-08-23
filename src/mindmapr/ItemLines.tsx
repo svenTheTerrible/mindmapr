@@ -1,33 +1,39 @@
-import { memo, useEffect, useState } from "react";
+import { CSSProperties, memo, useEffect, useState } from "react";
 import { ItemLine, LineProps } from "./ItemLine";
 import { calculateLineAndSvgCoords } from "./util";
 
 export type ParentChildRefWithId = Record<
   string,
-  [HTMLDivElement, HTMLDivElement]
+  [HTMLDivElement, HTMLDivElement, number]
 >;
 
 interface ItemLinesProps {
   parentChildRefsWithId: ParentChildRefWithId;
+  overwriteLineStyle?: (depth: number) => CSSProperties;
 }
 
 export default memo(function ItemLines({
   parentChildRefsWithId,
+  overwriteLineStyle,
 }: ItemLinesProps) {
-  const [coords, setCoords] = useState<Record<string, LineProps>>({});
+  const [coords, setCoords] = useState<
+    Record<string, LineProps & { depth: number }>
+  >({});
 
   useEffect(() => {
     setCoords((current) => {
       let lineCountChanged = false;
       Object.keys(parentChildRefsWithId).forEach((key) => {
-        //todo correct item line calculation
         if (!current[key]) {
           lineCountChanged = true;
         }
-        current[key] = calculateLineAndSvgCoords(
-          parentChildRefsWithId[key][1],
-          parentChildRefsWithId[key][0]
-        );
+        current[key] = {
+          ...calculateLineAndSvgCoords(
+            parentChildRefsWithId[key][1],
+            parentChildRefsWithId[key][0]
+          ),
+          depth: parentChildRefsWithId[key][2],
+        };
       });
       if (lineCountChanged) {
         return { ...current };
@@ -40,6 +46,8 @@ export default memo(function ItemLines({
     <div>
       {Object.keys(coords).map((key) => (
         <ItemLine
+          overwriteLineStyle={overwriteLineStyle}
+          depth={coords[key].depth}
           key={key}
           left={coords[key].left}
           top={coords[key].top}

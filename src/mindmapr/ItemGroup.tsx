@@ -10,7 +10,8 @@ interface ItemGroupProps<T extends HasIdAndChildren> {
   parentId: string | number;
   addParentChildRefWithId: (
     id: string,
-    value: [HTMLDivElement, HTMLDivElement]
+    value: [HTMLDivElement, HTMLDivElement],
+    depth: number
   ) => void;
   depth: number;
   selectedItem: string | number | undefined;
