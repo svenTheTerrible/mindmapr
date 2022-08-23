@@ -15,6 +15,8 @@ export interface RenderItemState {
 
 interface MindmaprProps<T extends HasIdAndChildren> {
   items: T;
+  addChildKey?: string;
+  addChildOnParentLevelKey?: string;
   setData: (items: T) => void;
   createNewItem: (parent: T) => T | undefined;
   itemsSelectable?: boolean;
@@ -27,6 +29,8 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   setData,
   createNewItem,
   renderItem,
+  addChildKey = "Tab",
+  addChildOnParentLevelKey = "Enter",
   itemsSelectable,
   allowSelectionChangeTroughKeyboard,
 }: MindmaprProps<T>) => {
@@ -54,6 +58,8 @@ export const Mindmapr = <T extends HasIdAndChildren>({
     <ClickAwayListener onClickAway={clearSelectedItem}>
       <div className="mindmaprContainer" onClick={clearSelectedItem}>
         <MindmaprItems
+          addChildKey={addChildKey}
+          addChildOnParentLevelKey={addChildOnParentLevelKey}
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
           items={items}

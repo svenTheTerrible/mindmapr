@@ -10,6 +10,8 @@ import {
 
 interface MindmaprItemsProps<T extends HasIdAndChildren> {
   items: T;
+  addChildKey: string;
+  addChildOnParentLevelKey: string;
   setData: (items: T) => void;
   createNewItem: (parent: T) => T;
   itemsSelectable?: boolean;
@@ -33,6 +35,8 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   addParentChildRefWithId,
   selectedItem,
   setSelectedItem,
+  addChildKey,
+  addChildOnParentLevelKey,
 }: MindmaprItemsProps<T>) {
   const [centerItemRef, setCenterItemRef] = useState<HTMLDivElement | null>(
     null
@@ -129,7 +133,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         }
       }
 
-      if (e.key === "Tab") {
+      if (e.key === addChildKey) {
         e.preventDefault();
         e.stopImmediatePropagation();
         const { item: newItems, newItemId } = addOnChildLevel(
@@ -144,7 +148,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         return;
       }
 
-      if (e.key === "Enter") {
+      if (e.key === addChildOnParentLevelKey) {
         e.preventDefault();
         e.stopImmediatePropagation();
         const { item: newItems, newItemId } = addOnParentLevel(
@@ -172,6 +176,8 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
     setData,
     leftItems,
     rightItems,
+    addChildKey,
+    addChildOnParentLevelKey,
   ]);
 
   const selectCenterItem = (e: React.MouseEvent) => {
