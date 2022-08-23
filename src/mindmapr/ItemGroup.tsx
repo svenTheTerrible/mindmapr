@@ -15,7 +15,6 @@ interface ItemGroupProps<T extends HasIdAndChildren> {
   depth: number;
   selectedItem: string | number | undefined;
   setSelectedItem: (value: string | number | undefined) => void;
-  itemsSelectable?: boolean;
 }
 
 export const ItemGroup = <T extends HasIdAndChildren>({

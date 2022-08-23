@@ -17,10 +17,8 @@ interface MindmaprProps<T extends HasIdAndChildren> {
   items: T;
   addChildKey?: string;
   addChildOnParentLevelKey?: string;
-  setData: (items: T) => void;
-  createNewItem: (parent: T) => T | undefined;
-  itemsSelectable?: boolean;
-  allowSelectionChangeTroughKeyboard?: boolean;
+  setData?: (items: T) => void;
+  createNewItem?: (parent: T) => T | undefined;
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
 }
 
@@ -31,8 +29,6 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   renderItem,
   addChildKey = "Tab",
   addChildOnParentLevelKey = "Enter",
-  itemsSelectable,
-  allowSelectionChangeTroughKeyboard,
 }: MindmaprProps<T>) => {
   const [parentChildRefWithId, setParentChildRefWithId] =
     useState<ParentChildRefWithId>({});
@@ -66,10 +62,6 @@ export const Mindmapr = <T extends HasIdAndChildren>({
           setData={setData as any}
           createNewItem={createNewItem as any}
           renderItem={renderItem as any}
-          allowSelectionChangeTroughKeyboard={
-            allowSelectionChangeTroughKeyboard
-          }
-          itemsSelectable={itemsSelectable}
           addParentChildRefWithId={addParentChildRefWithId}
         />
         <ItemLines parentChildRefsWithId={parentChildRefWithId} />

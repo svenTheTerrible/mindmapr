@@ -17,7 +17,6 @@ interface ItemProps<T extends HasIdAndChildren> {
   depth: number;
   selectedItem: string | number | undefined;
   setSelectedItem: (value: string | number | undefined) => void;
-  itemsSelectable?: boolean;
 }
 
 export const Item = <T extends HasIdAndChildren>({
@@ -28,7 +27,6 @@ export const Item = <T extends HasIdAndChildren>({
   depth,
   selectedItem,
   setSelectedItem,
-  itemsSelectable,
   parentId,
   addParentChildRefWithId,
 }: ItemProps<T>) => {
@@ -50,9 +48,7 @@ export const Item = <T extends HasIdAndChildren>({
   const selectItem = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (itemsSelectable) {
-      setSelectedItem(item.id);
-    }
+    setSelectedItem(item.id);
   };
 
   return (
@@ -71,7 +67,6 @@ export const Item = <T extends HasIdAndChildren>({
                 depth={depth + 1}
                 selectedItem={selectedItem}
                 setSelectedItem={setSelectedItem}
-                itemsSelectable={itemsSelectable}
               />
             ) : (
               <div className="itemWrapper" ref={setRef}>
@@ -109,7 +104,6 @@ export const Item = <T extends HasIdAndChildren>({
                 depth={depth + 1}
                 selectedItem={selectedItem}
                 setSelectedItem={setSelectedItem}
-                itemsSelectable={itemsSelectable}
               />
             )}
           </td>

@@ -150,8 +150,6 @@ export const App: FC = () => {
           items={data}
           setData={setData}
           createNewItem={createNewItem}
-          itemsSelectable={true}
-          allowSelectionChangeTroughKeyboard={true}
           renderItem={renderItem}
         />
       </div>

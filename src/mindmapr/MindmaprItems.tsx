@@ -12,10 +12,8 @@ interface MindmaprItemsProps<T extends HasIdAndChildren> {
   items: T;
   addChildKey: string;
   addChildOnParentLevelKey: string;
-  setData: (items: T) => void;
-  createNewItem: (parent: T) => T;
-  itemsSelectable?: boolean;
-  allowSelectionChangeTroughKeyboard?: boolean;
+  setData?: (items: T) => void;
+  createNewItem?: (parent: T) => T;
   selectedItem?: string | number;
   setSelectedItem: (value?: string | number) => void;
   addParentChildRefWithId: (
@@ -30,8 +28,6 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   setData,
   createNewItem,
   renderItem,
-  allowSelectionChangeTroughKeyboard,
-  itemsSelectable,
   addParentChildRefWithId,
   selectedItem,
   setSelectedItem,
@@ -50,14 +46,12 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   }, [items.children]);
 
   useEffect(() => {
-    if (!itemsSelectable) {
-      setSelectedItem(undefined);
-    }
-  }, [itemsSelectable, setSelectedItem]);
+    setSelectedItem(undefined);
+  }, [setSelectedItem]);
 
   useEffect(() => {
     const switchSelectionThroughKeypress = (e: KeyboardEvent) => {
-      if (!selectedItem || !allowSelectionChangeTroughKeyboard) {
+      if (!selectedItem) {
         return;
       }
 
@@ -143,7 +137,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         );
         if (newItemId) {
           setSelectedItem(newItemId);
-          setData(newItems);
+          setData?.(newItems);
         }
         return;
       }
@@ -158,7 +152,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         );
         if (newItemId) {
           setSelectedItem(newItemId);
-          setData(newItems);
+          setData?.(newItems);
         }
         return;
       }
@@ -168,7 +162,6 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
       window.removeEventListener("keydown", switchSelectionThroughKeypress);
     };
   }, [
-    allowSelectionChangeTroughKeyboard,
     selectedItem,
     setSelectedItem,
     createNewItem,
@@ -183,9 +176,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   const selectCenterItem = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (itemsSelectable) {
-      setSelectedItem(items.id);
-    }
+    setSelectedItem(items.id);
   };
 
   return (
@@ -201,7 +192,6 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
           depth={1}
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
-          itemsSelectable={itemsSelectable}
         />
       </div>
       <div
@@ -222,7 +212,6 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
           depth={1}
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
-          itemsSelectable={itemsSelectable}
         />
       </div>
     </>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { MindmapData } from "./App";
 import { RenderItemState } from "./mindmapr/Mindmapr";
 import "./MindmapItem.css";
@@ -63,6 +63,8 @@ export const MindmapItem: FC<MindmapItemProps> = ({
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
       applyAlreadyTypedContent();
     }
   };
