@@ -159,10 +159,9 @@ export const App: FC = () => {
 
 //todo
 // when navigating via arrow key -> <-, select the nearest item first (mostly the middle item)
-// check scrolling and centering, when mindmap area is smaller than the mindmap
+// when focusing new item, focus it, so that it gets scrolled to
 // check performance on large mindmaps
 // allow mindmap to only add items on one side as a tree via prop
-// make connection line thickness and color definable as a prop
 // convert project via react-create-lib
 // figure out plublishing on npm
 // write tests on util functions

@@ -56,6 +56,10 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   }, [setSelectedItem]);
 
   useEffect(() => {
+    centerItemRef?.focus();
+  }, [centerItemRef]);
+
+  useEffect(() => {
     const switchSelectionThroughKeypress = (e: KeyboardEvent) => {
       if (!selectedItem) {
         return;
@@ -207,6 +211,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         />
       </div>
       <div
+        tabIndex={99}
         className="centerItem"
         ref={(ref) => setCenterItemRef(ref)}
         onClick={selectCenterItem}
