@@ -158,7 +158,6 @@ export const App: FC = () => {
 };
 
 //todo
-// Mindmap is not completely visible when scrollbars get used.
 // when navigating via arrow key -> <-, select the nearest item first (mostly the middle item)
 // check performance on large mindmaps
 // allow mindmap to only add items on one side as a tree via prop

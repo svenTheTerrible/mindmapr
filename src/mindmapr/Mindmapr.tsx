@@ -59,23 +59,25 @@ export const Mindmapr = <T extends HasIdAndChildren>({
 
   return (
     <ClickAwayListener onClickAway={clearSelectedItem}>
-      <div className="mindmaprContainer" onClick={clearSelectedItem}>
-        <MindmaprItems
-          overwriteOnSelectedItemKeydown={overwriteOnSelectedItemKeydown}
-          addChildKey={addChildKey}
-          addChildOnParentLevelKey={addChildOnParentLevelKey}
-          selectedItem={selectedItem}
-          setSelectedItem={setSelectedItem}
-          items={items}
-          setData={setData as any}
-          createNewItem={createNewItem as any}
-          renderItem={renderItem as any}
-          addParentChildRefWithId={addParentChildRefWithId}
-        />
-        <ItemLines
-          parentChildRefsWithId={parentChildRefWithId}
-          overwriteLineStyle={overwriteLineStyle}
-        />
+      <div className="mindmaprScrollContainer" onClick={clearSelectedItem}>
+        <div className="innerMindmaprContainer">
+          <MindmaprItems
+            overwriteOnSelectedItemKeydown={overwriteOnSelectedItemKeydown}
+            addChildKey={addChildKey}
+            addChildOnParentLevelKey={addChildOnParentLevelKey}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            items={items}
+            setData={setData as any}
+            createNewItem={createNewItem as any}
+            renderItem={renderItem as any}
+            addParentChildRefWithId={addParentChildRefWithId}
+          />
+          <ItemLines
+            parentChildRefsWithId={parentChildRefWithId}
+            overwriteLineStyle={overwriteLineStyle}
+          />
+        </div>
       </div>
     </ClickAwayListener>
   );
