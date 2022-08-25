@@ -136,7 +136,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         if (foundInLeftItems && foundInLeftItems.childIds.length > 0) {
           setSelectedItem(
             findNearestChildItem(
-              foundInLeftItems.parentId,
+              selectedItem,
               foundInLeftItems.childIds,
               parentChildConnectionsRef.current
             )
@@ -166,7 +166,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         if (foundInRightItems && foundInRightItems.childIds.length > 0) {
           setSelectedItem(
             findNearestChildItem(
-              foundInRightItems.parentId,
+              selectedItem,
               foundInRightItems.childIds,
               parentChildConnectionsRef.current
             )
