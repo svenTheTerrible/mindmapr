@@ -10,6 +10,7 @@ import {
 
 interface MindmaprItemsProps<T extends HasIdAndChildren> {
   items: T;
+  side: "both" | "left" | "right";
   addChildKey: string;
   addChildOnParentLevelKey: string;
   setData?: (items: T) => void;
@@ -30,6 +31,7 @@ interface MindmaprItemsProps<T extends HasIdAndChildren> {
 
 export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   items,
+  side,
   setData,
   createNewItem,
   renderItem,
@@ -45,11 +47,23 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   );
 
   const { leftItems, rightItems } = useMemo(() => {
+    if (side === "left") {
+      return { leftItems: items.children, rightItems: [] } as unknown as {
+        leftItems: T[];
+        rightItems: T[];
+      };
+    }
+    if (side === "right") {
+      return { leftItems: [], rightItems: items.children } as unknown as {
+        leftItems: T[];
+        rightItems: T[];
+      };
+    }
     return splitItemsToLeftAndRight(items.children) as {
       leftItems: T[];
       rightItems: T[];
     };
-  }, [items.children]);
+  }, [items.children, side]);
 
   useEffect(() => {
     setSelectedItem(undefined);

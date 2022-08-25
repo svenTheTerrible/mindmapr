@@ -16,6 +16,7 @@ export interface RenderItemState {
 interface MindmaprProps<T extends HasIdAndChildren> {
   items: T;
   addChildKey?: string;
+  side?: "both" | "left" | "right";
   addChildOnParentLevelKey?: string;
   overwriteOnSelectedItemKeydown?: (
     selectedItem: string | number,
@@ -34,6 +35,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   renderItem,
   overwriteOnSelectedItemKeydown,
   addChildKey = "Tab",
+  side = "both",
   addChildOnParentLevelKey = "Enter",
   overwriteLineStyle,
 }: MindmaprProps<T>) => {
@@ -62,6 +64,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
       <div className="mindmaprScrollContainer" onClick={clearSelectedItem}>
         <div className="innerMindmaprContainer">
           <MindmaprItems
+            side={side}
             overwriteOnSelectedItemKeydown={overwriteOnSelectedItemKeydown}
             addChildKey={addChildKey}
             addChildOnParentLevelKey={addChildOnParentLevelKey}
