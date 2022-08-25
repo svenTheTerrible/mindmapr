@@ -158,9 +158,8 @@ export const App: FC = () => {
 };
 
 //todo
-// when navigating via arrow key -> <-, select the nearest item first (mostly the middle item)
+// allow item deletion with Entf key
 // check performance on large mindmaps
-// allow mindmap to only add items on one side as a tree via prop
 // convert project via react-create-lib
 // figure out plublishing on npm
 // write tests on util functions

@@ -1,7 +1,7 @@
-import { CSSProperties, ReactNode, useCallback, useState } from "react";
+import { CSSProperties, ReactNode, useCallback, useRef, useState } from "react";
 import "./Mindmapr.css";
 import ClickAwayListener from "react-click-away-listener";
-import ItemLines, { ParentChildRefWithId } from "./ItemLines";
+import ItemLines, { ParentChildConnection } from "./ItemLines";
 import MindmaprItems from "./MindmaprItems";
 
 export interface HasIdAndChildren {
@@ -39,8 +39,10 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   addChildOnParentLevelKey = "Enter",
   overwriteLineStyle,
 }: MindmaprProps<T>) => {
-  const [parentChildRefWithId, setParentChildRefWithId] =
-    useState<ParentChildRefWithId>({});
+  const [parentChildConnections, setParentChildConnections] = useState<
+    ParentChildConnection[]
+  >([]);
+  const parentChildConnectionsRef = useRef<ParentChildConnection[]>([]);
 
   const [selectedItem, setSelectedItem] = useState<number | string | undefined>(
     undefined
@@ -50,13 +52,15 @@ export const Mindmapr = <T extends HasIdAndChildren>({
     setSelectedItem(undefined);
   };
 
-  const addParentChildRefWithId = useCallback(
-    (id: string, value: [HTMLDivElement, HTMLDivElement], depth: number) => {
-      setParentChildRefWithId((current) => {
-        return { ...current, [id]: [...value, depth] };
+  const addParentChildConnection = useCallback(
+    (connection: ParentChildConnection) => {
+      setParentChildConnections((current) => {
+        const newValue = [...current, connection];
+        parentChildConnectionsRef.current = newValue;
+        return newValue;
       });
     },
-    [setParentChildRefWithId]
+    [setParentChildConnections]
   );
 
   return (
@@ -64,6 +68,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
       <div className="mindmaprScrollContainer" onClick={clearSelectedItem}>
         <div className="innerMindmaprContainer">
           <MindmaprItems
+            parentChildConnectionsRef={parentChildConnectionsRef}
             side={side}
             overwriteOnSelectedItemKeydown={overwriteOnSelectedItemKeydown}
             addChildKey={addChildKey}
@@ -74,10 +79,10 @@ export const Mindmapr = <T extends HasIdAndChildren>({
             setData={setData as any}
             createNewItem={createNewItem as any}
             renderItem={renderItem as any}
-            addParentChildRefWithId={addParentChildRefWithId}
+            addParentChildConnection={addParentChildConnection}
           />
           <ItemLines
-            parentChildRefsWithId={parentChildRefWithId}
+            parentChildConnections={parentChildConnections}
             overwriteLineStyle={overwriteLineStyle}
           />
         </div>

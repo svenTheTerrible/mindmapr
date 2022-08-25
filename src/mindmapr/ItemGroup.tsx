@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { Item } from "./Item";
+import { ParentChildConnection } from "./ItemLines";
 import { HasIdAndChildren, RenderItemState } from "./Mindmapr";
 
 interface ItemGroupProps<T extends HasIdAndChildren> {
@@ -8,11 +9,7 @@ interface ItemGroupProps<T extends HasIdAndChildren> {
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
   parentRef: HTMLDivElement | null;
   parentId: string | number;
-  addParentChildRefWithId: (
-    id: string,
-    value: [HTMLDivElement, HTMLDivElement],
-    depth: number
-  ) => void;
+  addParentChildConnection: (connection: ParentChildConnection) => void;
   depth: number;
   selectedItem: string | number | undefined;
   setSelectedItem: (value: string | number | undefined) => void;

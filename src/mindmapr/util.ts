@@ -1,6 +1,7 @@
 import { LineProps } from "./ItemLine";
 import { HasIdAndChildren } from "./Mindmapr";
 import _ from "lodash";
+import { ParentChildConnection } from "./ItemLines";
 
 interface Coords {
   x: number;
@@ -66,11 +67,6 @@ const getRelativeCoords = (element: HTMLDivElement): Coords => {
     x: element.offsetLeft,
   };
 };
-
-export const generateChildParentId = (
-  parentId: string | number,
-  childId: string | number
-): string => `${childId}-${parentId}`;
 
 export const calculateLineAndSvgCoords = (
   childRef: HTMLDivElement,
@@ -264,4 +260,76 @@ export const addOnParentLevel = <T extends HasIdAndChildren>(
     }
   }
   return { item: itemClone, newItemId };
+};
+
+interface ChildDistance {
+  childId: string | number;
+  distance: number;
+}
+
+export const findNearestChildItem = (
+  parentId: string | number,
+  childIds: Array<string | number>,
+  connections: ParentChildConnection[]
+): string | number | undefined => {
+  if (childIds.length === 0) {
+    return undefined;
+  }
+
+  const elementRegister = connections.reduce(
+    (acc: Record<string, HTMLDivElement>, connection) => {
+      if (connection.childId === parentId) {
+        acc[parentId] = connection.childHtmlItem;
+      }
+      if (connection.parentId === parentId) {
+        acc[parentId] = connection.parentHtmlItem;
+      }
+      childIds.forEach((childId) => {
+        if (connection.childId === childId) {
+          acc[childId] = connection.childHtmlItem;
+        }
+        if (connection.parentId === childId) {
+          acc[childId] = connection.parentHtmlItem;
+        }
+      });
+      return acc;
+    },
+    {}
+  );
+
+  const distanceFromParent = childIds.reduce(
+    (acc: ChildDistance[], childId) => {
+      return [
+        ...acc,
+        {
+          childId,
+          distance: calculateChildParentDistance(
+            elementRegister[childId],
+            elementRegister[parentId]
+          ),
+        },
+      ];
+    },
+    []
+  );
+  return _.sortBy(distanceFromParent, ["distance"])[0].childId;
+};
+
+const calculateChildParentDistance = (
+  child: HTMLDivElement,
+  parent: HTMLDivElement
+): number => {
+  const parentBox = parent.getBoundingClientRect();
+  const childBox = child.getBoundingClientRect();
+  const parentCoords: Coords = {
+    x: parentBox.x + parentBox.width / 2,
+    y: parentBox.y + parentBox.height / 2,
+  };
+  const childCoords: Coords = {
+    x: childBox.x + childBox.width / 2,
+    y: childBox.y + childBox.height / 2,
+  };
+  const a = Math.abs(parentCoords.x - childCoords.x);
+  const b = Math.abs(parentCoords.y - childCoords.y);
+  return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 };

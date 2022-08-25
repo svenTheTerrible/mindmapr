@@ -1,15 +1,25 @@
-import { useEffect, useMemo, useState, ReactNode, memo } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  ReactNode,
+  memo,
+  MutableRefObject,
+} from "react";
 import { ItemGroup } from "./ItemGroup";
+import { ParentChildConnection } from "./ItemLines";
 import { HasIdAndChildren, RenderItemState } from "./Mindmapr";
 import {
   addOnChildLevel,
   addOnParentLevel,
   findItemById,
+  findNearestChildItem,
   splitItemsToLeftAndRight,
 } from "./util";
 
 interface MindmaprItemsProps<T extends HasIdAndChildren> {
   items: T;
+  parentChildConnectionsRef: MutableRefObject<ParentChildConnection[]>;
   side: "both" | "left" | "right";
   addChildKey: string;
   addChildOnParentLevelKey: string;
@@ -21,21 +31,18 @@ interface MindmaprItemsProps<T extends HasIdAndChildren> {
   createNewItem?: (parent: T) => T;
   selectedItem?: string | number;
   setSelectedItem: (value?: string | number) => void;
-  addParentChildRefWithId: (
-    id: string,
-    value: [HTMLDivElement, HTMLDivElement],
-    depth: number
-  ) => void;
+  addParentChildConnection: (connection: ParentChildConnection) => void;
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
 }
 
 export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   items,
   side,
+  parentChildConnectionsRef,
   setData,
   createNewItem,
   renderItem,
-  addParentChildRefWithId,
+  addParentChildConnection,
   overwriteOnSelectedItemKeydown,
   selectedItem,
   setSelectedItem,
@@ -116,12 +123,24 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         e.preventDefault();
         e.stopImmediatePropagation();
         if (selectedItemIsCenter && leftItems.length > 0) {
-          setSelectedItem(leftItems[0].id);
+          setSelectedItem(
+            findNearestChildItem(
+              items.id,
+              leftItems.map((item) => item.id),
+              parentChildConnectionsRef.current
+            )
+          );
           return;
         }
 
         if (foundInLeftItems && foundInLeftItems.childIds.length > 0) {
-          setSelectedItem(foundInLeftItems.childIds[0]);
+          setSelectedItem(
+            findNearestChildItem(
+              foundInLeftItems.parentId,
+              foundInLeftItems.childIds,
+              parentChildConnectionsRef.current
+            )
+          );
           return;
         }
 
@@ -134,12 +153,24 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         e.preventDefault();
         e.stopImmediatePropagation();
         if (selectedItemIsCenter && rightItems.length > 0) {
-          setSelectedItem(rightItems[0].id);
+          setSelectedItem(
+            findNearestChildItem(
+              items.id,
+              rightItems.map((item) => item.id),
+              parentChildConnectionsRef.current
+            )
+          );
           return;
         }
 
         if (foundInRightItems && foundInRightItems.childIds.length > 0) {
-          setSelectedItem(foundInRightItems.childIds[0]);
+          setSelectedItem(
+            findNearestChildItem(
+              foundInRightItems.parentId,
+              foundInRightItems.childIds,
+              parentChildConnectionsRef.current
+            )
+          );
           return;
         }
 
@@ -207,6 +238,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
     addChildKey,
     addChildOnParentLevelKey,
     overwriteOnSelectedItemKeydown,
+    parentChildConnectionsRef,
   ]);
 
   const selectCenterItem = (e: React.MouseEvent) => {
@@ -221,7 +253,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         <ItemGroup
           parentRef={centerItemRef}
           parentId={items.id}
-          addParentChildRefWithId={addParentChildRefWithId}
+          addParentChildConnection={addParentChildConnection}
           items={leftItems}
           side="left"
           renderItem={renderItem}
@@ -242,7 +274,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         <ItemGroup
           parentRef={centerItemRef}
           parentId={items.id}
-          addParentChildRefWithId={addParentChildRefWithId}
+          addParentChildConnection={addParentChildConnection}
           items={rightItems}
           side="right"
           renderItem={renderItem}

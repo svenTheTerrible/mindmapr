@@ -2,7 +2,7 @@ import { HasIdAndChildren, RenderItemState } from "./Mindmapr";
 import React, { ReactNode, useEffect, useState } from "react";
 import { ItemGroup } from "./ItemGroup";
 import "./Item.css";
-import { generateChildParentId } from "./util";
+import { ParentChildConnection } from "./ItemLines";
 
 interface ItemProps<T extends HasIdAndChildren> {
   item: T;
@@ -10,11 +10,7 @@ interface ItemProps<T extends HasIdAndChildren> {
   side: "left" | "right";
   parentRef: HTMLDivElement | null;
   parentId: string | number;
-  addParentChildRefWithId: (
-    id: string,
-    value: [HTMLDivElement, HTMLDivElement],
-    depth: number
-  ) => void;
+  addParentChildConnection: (connection: ParentChildConnection) => void;
   depth: number;
   selectedItem: string | number | undefined;
   setSelectedItem: (value: string | number | undefined) => void;
@@ -29,24 +25,26 @@ export const Item = <T extends HasIdAndChildren>({
   selectedItem,
   setSelectedItem,
   parentId,
-  addParentChildRefWithId,
+  addParentChildConnection,
 }: ItemProps<T>) => {
   const [newParentRef, setNewParentRef] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (parentRef && newParentRef) {
-      addParentChildRefWithId(
-        generateChildParentId(parentId, item.id),
-        [parentRef, newParentRef],
-        depth
-      );
+      addParentChildConnection({
+        childHtmlItem: newParentRef,
+        parentHtmlItem: parentRef,
+        childId: item.id,
+        depth: depth,
+        parentId,
+      });
     }
   }, [
     parentRef,
     newParentRef,
     parentId,
     item.id,
-    addParentChildRefWithId,
+    addParentChildConnection,
     depth,
   ]);
 
@@ -75,7 +73,7 @@ export const Item = <T extends HasIdAndChildren>({
               <ItemGroup
                 parentRef={newParentRef}
                 parentId={item.id}
-                addParentChildRefWithId={addParentChildRefWithId}
+                addParentChildConnection={addParentChildConnection}
                 items={item.children as T[]}
                 renderItem={renderItem}
                 side={side}
@@ -112,7 +110,7 @@ export const Item = <T extends HasIdAndChildren>({
               <ItemGroup
                 parentRef={newParentRef}
                 parentId={item.id}
-                addParentChildRefWithId={addParentChildRefWithId}
+                addParentChildConnection={addParentChildConnection}
                 items={item.children as T[]}
                 renderItem={renderItem}
                 side={side}
