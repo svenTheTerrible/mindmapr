@@ -158,7 +158,6 @@ export const App: FC = () => {
 };
 
 //todo
-// allow item deletion with Entf key
 // check performance on large mindmaps
 // convert project via react-create-lib
 // figure out plublishing on npm

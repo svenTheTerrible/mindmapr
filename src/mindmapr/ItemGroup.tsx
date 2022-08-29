@@ -10,6 +10,9 @@ interface ItemGroupProps<T extends HasIdAndChildren> {
   parentRef: HTMLDivElement | null;
   parentId: string | number;
   addParentChildConnection: (connection: ParentChildConnection) => void;
+  removeParentChildConnection: (
+    childId: string | number
+  ) => void;
   depth: number;
   selectedItem: string | number | undefined;
   setSelectedItem: (value: string | number | undefined) => void;

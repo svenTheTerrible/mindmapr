@@ -1,4 +1,4 @@
-import { CSSProperties, memo, useEffect, useState } from "react";
+import { CSSProperties, memo, useMemo } from "react";
 import { ItemLine, LineProps } from "./ItemLine";
 import { calculateLineAndSvgCoords } from "./util";
 
@@ -10,6 +10,8 @@ export interface ParentChildConnection {
   childId: string | number;
 }
 
+type LineCoords = Record<string, LineProps & { depth: number }>;
+
 interface ItemLinesProps {
   parentChildConnections: ParentChildConnection[];
   overwriteLineStyle?: (depth: number) => CSSProperties;
@@ -19,32 +21,20 @@ export default memo(function ItemLines({
   parentChildConnections,
   overwriteLineStyle,
 }: ItemLinesProps) {
-  const [coords, setCoords] = useState<
-    Record<string, LineProps & { depth: number }>
-  >({});
 
-  useEffect(() => {
-    setCoords((current) => {
-      let lineCountChanged = false;
-      parentChildConnections.forEach((connection) => {
-        const connectionId = `${connection.parentId} ${connection.childId}`;
-        if (!current[connectionId]) {
-          lineCountChanged = true;
-        }
-        current[connectionId] = {
-          ...calculateLineAndSvgCoords(
-            connection.childHtmlItem,
-            connection.parentHtmlItem
-          ),
-          depth: connection.depth,
-        };
-      });
-      if (lineCountChanged) {
-        return { ...current };
-      }
-      return current;
-    });
-  }, [parentChildConnections, setCoords]);
+  const coords = useMemo(()=> {
+    return parentChildConnections.reduce((acc: LineCoords, connection) => {
+      const connectionId = `${connection.parentId} ${connection.childId}`;
+      return {...acc, [connectionId]:{
+        ...calculateLineAndSvgCoords(
+          connection.childHtmlItem,
+          connection.parentHtmlItem
+        ),
+        depth: connection.depth,
+      }};
+    }, {});
+  }, [parentChildConnections]);
+
 
   return (
     <div>

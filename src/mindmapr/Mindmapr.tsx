@@ -18,6 +18,7 @@ interface MindmaprProps<T extends HasIdAndChildren> {
   addChildKey?: string;
   side?: "both" | "left" | "right";
   addChildOnParentLevelKey?: string;
+  deleteItemKey?: string;
   overwriteOnSelectedItemKeydown?: (
     selectedItem: string | number,
     e: KeyboardEvent
@@ -35,6 +36,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   renderItem,
   overwriteOnSelectedItemKeydown,
   addChildKey = "Tab",
+  deleteItemKey = "Delete",
   side = "both",
   addChildOnParentLevelKey = "Enter",
   overwriteLineStyle,
@@ -63,6 +65,21 @@ export const Mindmapr = <T extends HasIdAndChildren>({
     [setParentChildConnections]
   );
 
+  const removeParentChildConnection = useCallback(
+    (childId: string | number) => {
+      setParentChildConnections((current) => {
+        const newValue = current.filter((connection) => {
+          return (
+            connection.childId !== childId
+          );
+        })
+        parentChildConnectionsRef.current = newValue;
+        return newValue;
+      });
+    },
+    [setParentChildConnections]
+  );
+
   return (
     <ClickAwayListener onClickAway={clearSelectedItem}>
       <div className="mindmaprScrollContainer" onClick={clearSelectedItem}>
@@ -72,6 +89,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
             side={side}
             overwriteOnSelectedItemKeydown={overwriteOnSelectedItemKeydown}
             addChildKey={addChildKey}
+            deleteItemKey={deleteItemKey}
             addChildOnParentLevelKey={addChildOnParentLevelKey}
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem}
@@ -80,6 +98,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
             createNewItem={createNewItem as any}
             renderItem={renderItem as any}
             addParentChildConnection={addParentChildConnection}
+            removeParentChildConnection={removeParentChildConnection}
           />
           <ItemLines
             parentChildConnections={parentChildConnections}

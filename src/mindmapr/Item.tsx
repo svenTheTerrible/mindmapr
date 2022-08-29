@@ -11,6 +11,9 @@ interface ItemProps<T extends HasIdAndChildren> {
   parentRef: HTMLDivElement | null;
   parentId: string | number;
   addParentChildConnection: (connection: ParentChildConnection) => void;
+  removeParentChildConnection: (
+    childId: string | number
+  ) => void;
   depth: number;
   selectedItem: string | number | undefined;
   setSelectedItem: (value: string | number | undefined) => void;
@@ -26,8 +29,15 @@ export const Item = <T extends HasIdAndChildren>({
   setSelectedItem,
   parentId,
   addParentChildConnection,
+  removeParentChildConnection
 }: ItemProps<T>) => {
   const [newParentRef, setNewParentRef] = useState<HTMLDivElement | null>(null);
+
+  useEffect(()=> {
+    return ()=> {
+      removeParentChildConnection(item.id);
+    }
+  }, []); //eslint-disable-line
 
   useEffect(() => {
     if (parentRef && newParentRef) {
@@ -71,6 +81,7 @@ export const Item = <T extends HasIdAndChildren>({
           <td>
             {side === "left" ? (
               <ItemGroup
+              removeParentChildConnection={removeParentChildConnection}
                 parentRef={newParentRef}
                 parentId={item.id}
                 addParentChildConnection={addParentChildConnection}
@@ -108,6 +119,7 @@ export const Item = <T extends HasIdAndChildren>({
               </div>
             ) : (
               <ItemGroup
+              removeParentChildConnection={removeParentChildConnection}
                 parentRef={newParentRef}
                 parentId={item.id}
                 addParentChildConnection={addParentChildConnection}

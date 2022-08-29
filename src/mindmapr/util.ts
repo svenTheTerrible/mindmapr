@@ -333,3 +333,18 @@ const calculateChildParentDistance = (
   const b = Math.abs(parentCoords.y - childCoords.y);
   return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 };
+
+export const removeItemById = <T extends HasIdAndChildren>(
+  item: T,
+  id: string | number
+): T => {
+  for (let i = 0; i < item.children.length; i++) {
+    if (item.children[i].id === id) {
+      item.children.splice(i, 1);
+      break;
+    } else {
+      removeItemById(item.children[i], id);
+    }
+  }
+  return _.cloneDeep(item);
+};
