@@ -17,6 +17,7 @@ import {
   removeItemById,
   splitItemsToLeftAndRight,
 } from "./util";
+import styled from 'styled-components';
 
 interface MindmaprItemsProps<T extends HasIdAndChildren> {
   items: T;
@@ -269,7 +270,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
 
   return (
     <>
-      <div className="leftContainer">
+      <LeftContainer>
         <ItemGroup
         removeParentChildConnection={removeParentChildConnection}
           parentRef={centerItemRef}
@@ -282,16 +283,15 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
         />
-      </div>
-      <div
+      </LeftContainer>
+      <CenterItem
         tabIndex={-1}
-        className="centerItem"
         ref={(ref) => setCenterItemRef(ref)}
         onClick={selectCenterItem}
       >
         {renderItem(items, 0, { isSelected: selectedItem === items.id })}
-      </div>
-      <div className="rightContainer">
+      </CenterItem>
+      <RightContainer>
         <ItemGroup
         removeParentChildConnection={removeParentChildConnection}
           parentRef={centerItemRef}
@@ -304,7 +304,25 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
         />
-      </div>
+      </RightContainer>
     </>
   );
 });
+
+
+const LeftContainer = styled.div `
+  margin-right: 15px;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
+const CenterItem = styled.div `
+  z-index: 2;
+  &:focus {
+    outline: none;
+  }
+`;
+
+const RightContainer = styled.div `
+  margin-left: 15px;
+`;

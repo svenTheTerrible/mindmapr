@@ -1,8 +1,9 @@
 import { HasIdAndChildren, RenderItemState } from "./Mindmapr";
 import React, { ReactNode, useEffect, useState } from "react";
 import { ItemGroup } from "./ItemGroup";
-import "./Item.css";
 import { ParentChildConnection } from "./ItemLines";
+import styled from 'styled-components';
+import { SidedTable } from "./SidedTable";
 
 interface ItemProps<T extends HasIdAndChildren> {
   item: T;
@@ -75,7 +76,7 @@ export const Item = <T extends HasIdAndChildren>({
   };
 
   return (
-    <table className={side === "left" ? "leftItem" : "rightItem"}>
+    <SidedTable side={side}>
       <tbody>
         <tr>
           <td>
@@ -93,30 +94,28 @@ export const Item = <T extends HasIdAndChildren>({
                 setSelectedItem={setSelectedItem}
               />
             ) : (
-              <div tabIndex={-1} className="itemWrapper" ref={setRef}>
-                <div
-                  style={{ position: "relative", zIndex: 2 }}
+              <ItemWrapperBackground tabIndex={-1} ref={setRef}>
+                <ItemWrapper
                   onClick={selectItem}
                 >
                   {renderItem(item, depth, {
                     isSelected: item.id === selectedItem,
                   })}
-                </div>
-              </div>
+                </ItemWrapper>
+              </ItemWrapperBackground>
             )}
           </td>
           <td>
             {side === "left" ? (
-              <div tabIndex={-1} className="itemWrapper" ref={setRef}>
-                <div
-                  style={{ position: "relative", zIndex: 2 }}
+              <ItemWrapperBackground tabIndex={-1} ref={setRef}>
+                <ItemWrapper
                   onClick={selectItem}
                 >
                   {renderItem(item, depth, {
                     isSelected: item.id === selectedItem,
                   })}
-                </div>
-              </div>
+                </ItemWrapper>
+              </ItemWrapperBackground>
             ) : (
               <ItemGroup
               removeParentChildConnection={removeParentChildConnection}
@@ -134,6 +133,19 @@ export const Item = <T extends HasIdAndChildren>({
           </td>
         </tr>
       </tbody>
-    </table>
+    </SidedTable>
   );
 };
+
+const ItemWrapperBackground = styled.div `
+  position: relative;
+  background-color: white;
+  &:focus {
+    outline: none;
+  }
+`;
+
+const ItemWrapper = styled.div `
+  position: relative;
+  z-index: 2;
+`;

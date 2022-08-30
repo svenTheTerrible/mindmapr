@@ -1,8 +1,8 @@
 import { CSSProperties, ReactNode, useCallback, useRef, useState } from "react";
-import "./Mindmapr.css";
 import ClickAwayListener from "react-click-away-listener";
 import ItemLines, { ParentChildConnection } from "./ItemLines";
 import MindmaprItems from "./MindmaprItems";
+import styled from 'styled-components';
 
 export interface HasIdAndChildren {
   id: string | number;
@@ -82,8 +82,8 @@ export const Mindmapr = <T extends HasIdAndChildren>({
 
   return (
     <ClickAwayListener onClickAway={clearSelectedItem}>
-      <div className="mindmaprScrollContainer" onClick={clearSelectedItem}>
-        <div className="innerMindmaprContainer">
+      <ScrollContainer onClick={clearSelectedItem}>
+        <InnerContainer>
           <MindmaprItems
             parentChildConnectionsRef={parentChildConnectionsRef}
             side={side}
@@ -104,8 +104,27 @@ export const Mindmapr = <T extends HasIdAndChildren>({
             parentChildConnections={parentChildConnections}
             overwriteLineStyle={overwriteLineStyle}
           />
-        </div>
-      </div>
+        </InnerContainer>
+      </ScrollContainer>
     </ClickAwayListener>
   );
 };
+
+
+const ScrollContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  position: relative;
+`;
+
+const InnerContainer = styled.div`
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+`
