@@ -1,4 +1,4 @@
-import {
+import React, {
   useEffect,
   useMemo,
   useState,
@@ -8,7 +8,7 @@ import {
 } from "react";
 import { ItemGroup } from "./ItemGroup";
 import { ParentChildConnection } from "./ItemLines";
-import { HasIdAndChildren, RenderItemState } from "./Mindmapr";
+import { HasIdAndChildren, RenderItemState } from "./";
 import {
   addOnChildLevel,
   addOnParentLevel,

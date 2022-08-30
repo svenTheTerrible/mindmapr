@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { Item } from "./Item";
 import { ParentChildConnection } from "./ItemLines";
-import { HasIdAndChildren, RenderItemState } from "./Mindmapr";
+import { HasIdAndChildren, RenderItemState } from "./";
 
 interface ItemGroupProps<T extends HasIdAndChildren> {
   items: T[];

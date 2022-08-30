@@ -1,4 +1,4 @@
-import { CSSProperties, memo, useMemo } from "react";
+import React, { CSSProperties, memo, useMemo } from "react";
 import { ItemLine, LineProps } from "./ItemLine";
 import { calculateLineAndSvgCoords } from "./util";
 

@@ -1,9 +1,9 @@
-import { HasIdAndChildren, RenderItemState } from "./Mindmapr";
 import React, { ReactNode, useEffect, useState } from "react";
 import { ItemGroup } from "./ItemGroup";
 import { ParentChildConnection } from "./ItemLines";
 import styled from 'styled-components';
 import { SidedTable } from "./SidedTable";
+import { HasIdAndChildren, RenderItemState } from ".";
 
 interface ItemProps<T extends HasIdAndChildren> {
   item: T;

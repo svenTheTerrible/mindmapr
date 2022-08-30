@@ -1,4 +1,4 @@
-import { CSSProperties, FC } from "react";
+import React, { CSSProperties, FC } from "react";
 
 export interface LineProps {
   left: number | undefined;

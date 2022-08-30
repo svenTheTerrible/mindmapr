@@ -1,9 +1,9 @@
-import { FC, ReactNode, useState } from "react";
+import React, { FC, ReactNode, useState } from "react";
 import "./App.css";
 import { MindmapItem } from "./MindmapItem";
-import { Mindmapr, RenderItemState } from "./mindmapr/Mindmapr";
+import { Mindmapr, RenderItemState } from "../../";
 import uniqid from "uniqid";
-import { findMindmapElementById } from "./mindmapr/util";
+import { findMindmapElementById } from "../../";
 
 export interface MindmapData {
   id: string | number;

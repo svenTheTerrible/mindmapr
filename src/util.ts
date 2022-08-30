@@ -1,5 +1,5 @@
 import { LineProps } from "./ItemLine";
-import { HasIdAndChildren } from "./Mindmapr";
+import { HasIdAndChildren } from "./";
 import _ from "lodash";
 import { ParentChildConnection } from "./ItemLines";
 
