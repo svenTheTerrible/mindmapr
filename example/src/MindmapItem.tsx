@@ -7,7 +7,7 @@ interface MindmapItemProps {
   depth: number;
   data: MindmapData;
   state: RenderItemState;
-  changeItemText: (id: string | number, name: string) => void;
+  changeItemText?: (id: string | number, name: string) => void;
 }
 
 const depthClasses = [
@@ -37,6 +37,8 @@ export const MindmapItem: FC<MindmapItemProps> = ({
   const [inputValue, setInputValue] = useState<string | undefined>();
 
   const enableEditing = () => {
+    if(!changeItemText){return;}
+
     if (!state.isSelected) {
       return;
     }
