@@ -3,6 +3,7 @@
   "repository": {
     "url": "https://github.com/svenTheTerrible/mindmapr"
   },
+  "homepage": "https://mindmapr.terrible-sven.com",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
