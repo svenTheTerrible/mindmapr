@@ -14,8 +14,9 @@ export interface RenderItemState {
   isSelected: boolean;
 }
 
-interface MindmaprProps<T extends HasIdAndChildren> {
+export interface MindmaprProps<T extends HasIdAndChildren> {
   items: T;
+  renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
   addChildKey?: string;
   side?: "both" | "left" | "right";
   addChildOnParentLevelKey?: string;
@@ -27,7 +28,6 @@ interface MindmaprProps<T extends HasIdAndChildren> {
   overwriteLineStyle?: (depth: number) => CSSProperties;
   setData?: (items: T) => void;
   createNewItem?: (parent: T) => T | undefined;
-  renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
 }
 
 export {
