@@ -320,7 +320,8 @@ const CenterItem = styled.div `
   z-index: 2;
   &:focus {
     outline: none;
-  }
+  };
+  background-color: white;
 `;
 
 const RightContainer = styled.div `

@@ -142,7 +142,8 @@ const ItemWrapperBackground = styled.div `
   background-color: white;
   &:focus {
     outline: none;
-  }
+  };
+  z-index: 1;
 `;
 
 const ItemWrapper = styled.div `
