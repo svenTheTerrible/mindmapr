@@ -1,5 +1,8 @@
 {
-  "version": "0.1.0",
+  "version": "1.0.3",
+  "repository": {
+    "url": "https://github.com/svenTheTerrible/mindmapr"
+  },
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -17,7 +20,9 @@
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "analyze": "size-limit --why",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -35,6 +40,10 @@
   },
   "name": "mindmapr",
   "author": "Sven Staffl",
+  "np": {
+    "yarn": true,
+    "contents": "dist"
+  },
   "module": "dist/mindmapr.esm.js",
   "size-limit": [
     {
@@ -48,6 +57,11 @@
   ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^8.0.1",
+    "@storybook/addon-essentials": "^6.5.10",
+    "@storybook/addon-info": "^5.3.21",
+    "@storybook/addon-links": "^6.5.10",
+    "@storybook/addons": "^6.5.10",
+    "@storybook/react": "^6.5.10",
     "@types/lodash": "^4.14.182",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
@@ -56,15 +70,16 @@
     "husky": "^8.0.1",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
-    "react-click-away-listener": "^2.2.1",
     "react-dom": "^18.2.0",
     "size-limit": "^8.0.1",
-    "styled-components": "^5.3.5",
     "tsdx": "^0.14.1",
     "tslib": "^2.4.0",
-    "typescript": "^4.8.2"
+    "typescript": "^4.8.2",
+    "uniqid": "^5.4.0"
   },
   "dependencies": {
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.21",
+    "react-click-away-listener": "^2.2.1",
+    "styled-components": "^5.3.5"
   }
 }
