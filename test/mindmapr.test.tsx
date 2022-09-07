@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import {render} from '@testing-library/react';
 import { HasIdAndChildren, Mindmapr } from '../src';
 
 interface TestItem extends  HasIdAndChildren{
@@ -8,8 +8,6 @@ interface TestItem extends  HasIdAndChildren{
 
 describe('it', () => {
   it('renders without crashing', () => {
-    const div = document.createElement('div');
-
     const item: TestItem = {
       id: "0",
       children: [],
@@ -18,7 +16,6 @@ describe('it', () => {
     const renderItem = (item: TestItem): React.ReactNode=> {
       return <div>{item.name}</div>
     }
-    ReactDOM.render(<Mindmapr items={item} renderItem={renderItem}  />, div);
-    ReactDOM.unmountComponentAtNode(div);
+    render(<Mindmapr items={item} renderItem={renderItem}  />);
   });
 });
