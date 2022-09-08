@@ -34,7 +34,11 @@ const Template = <T extends HasIdAndChildren>(args: MindmaprProps<T>) => {
   if (!state) {
     return <div></div>;
   }
-  return <Mindmapr {...newArgs} items={state} />;
+  return (
+    <div style={{ width: 600, height: 300, margin: 'auto' }}>
+      <Mindmapr {...newArgs} items={state} />
+    </div>
+  );
 };
 
 const items: ExampleItem = {

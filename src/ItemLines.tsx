@@ -16,6 +16,8 @@ interface ItemLinesProps {
   parentChildConnections: ParentChildConnection[];
   overwriteLineStyle?: (depth: number) => CSSProperties;
   outsideLineUpdateCounter: number;
+  width: number;
+  height: number;
 }
 
 export default memo(function ItemLines({

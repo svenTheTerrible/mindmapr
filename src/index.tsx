@@ -11,6 +11,7 @@ import ItemLines, { ParentChildConnection } from './ItemLines';
 import MindmaprItems from './MindmaprItems';
 import styled from 'styled-components';
 import { findMindmapElementById } from './util';
+import Autosizer from 'react-virtualized-auto-sizer';
 
 export interface HasIdAndChildren {
   id: string | number;
@@ -56,24 +57,6 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   >([]);
   const parentChildConnectionsRef = useRef<ParentChildConnection[]>([]);
   const [outsideLineUpdater, setOutsideLineUpdater] = useState<number>(0);
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const updateLinesAfterResize = () => {
-      setOutsideLineUpdater(current => current + 1);
-    };
-
-    scrollContainerRef.current?.addEventListener(
-      'resize',
-      updateLinesAfterResize
-    );
-    return () => {
-      scrollContainerRef.current?.removeEventListener(
-        'resize',
-        updateLinesAfterResize
-      );
-    };
-  }, []);
 
   useEffect(() => {
     setOutsideLineUpdater(current => current + 1);
@@ -113,34 +96,40 @@ export const Mindmapr = <T extends HasIdAndChildren>({
 
   return (
     <ClickAwayListener onClickAway={clearSelectedItem}>
-      <ScrollContainer
-        onClick={clearSelectedItem}
-        ref={ref => (scrollContainerRef.current = ref)}
-      >
-        <InnerContainer>
-          <MindmaprItems
-            parentChildConnectionsRef={parentChildConnectionsRef}
-            side={side}
-            overwriteOnSelectedItemKeydown={overwriteOnSelectedItemKeydown}
-            addChildKey={addChildKey}
-            deleteItemKey={deleteItemKey}
-            addChildOnParentLevelKey={addChildOnParentLevelKey}
-            selectedItem={selectedItem}
-            setSelectedItem={setSelectedItem}
-            items={items}
-            setData={setData as any}
-            createNewItem={createNewItem as any}
-            renderItem={renderItem as any}
-            addParentChildConnection={addParentChildConnection}
-            removeParentChildConnection={removeParentChildConnection}
-          />
-          <ItemLines
-            parentChildConnections={parentChildConnections}
-            overwriteLineStyle={overwriteLineStyle}
-            outsideLineUpdateCounter={outsideLineUpdater}
-          />
-        </InnerContainer>
-      </ScrollContainer>
+      <Autosizer>
+        {({ width, height }) => (
+          <ScrollContainer
+            onClick={clearSelectedItem}
+            style={{ width, height }}
+          >
+            <InnerContainer>
+              <MindmaprItems
+                parentChildConnectionsRef={parentChildConnectionsRef}
+                side={side}
+                overwriteOnSelectedItemKeydown={overwriteOnSelectedItemKeydown}
+                addChildKey={addChildKey}
+                deleteItemKey={deleteItemKey}
+                addChildOnParentLevelKey={addChildOnParentLevelKey}
+                selectedItem={selectedItem}
+                setSelectedItem={setSelectedItem}
+                items={items}
+                setData={setData as any}
+                createNewItem={createNewItem as any}
+                renderItem={renderItem as any}
+                addParentChildConnection={addParentChildConnection}
+                removeParentChildConnection={removeParentChildConnection}
+              />
+              <ItemLines
+                parentChildConnections={parentChildConnections}
+                overwriteLineStyle={overwriteLineStyle}
+                outsideLineUpdateCounter={outsideLineUpdater}
+                width={width}
+                height={height}
+              />
+            </InnerContainer>
+          </ScrollContainer>
+        )}
+      </Autosizer>
     </ClickAwayListener>
   );
 };
