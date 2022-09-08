@@ -1,20 +1,18 @@
-import React, { ReactNode, useEffect, useState } from "react";
-import { ItemGroup } from "./ItemGroup";
-import { ParentChildConnection } from "./ItemLines";
+import React, { ReactNode, useEffect, useState } from 'react';
+import { ItemGroup } from './ItemGroup';
+import { ParentChildConnection } from './ItemLines';
 import styled from 'styled-components';
-import { SidedTable } from "./SidedTable";
-import { HasIdAndChildren, RenderItemState } from ".";
+import { SidedTable } from './SidedTable';
+import { HasIdAndChildren, RenderItemState } from '.';
 
 interface ItemProps<T extends HasIdAndChildren> {
   item: T;
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
-  side: "left" | "right";
+  side: 'left' | 'right';
   parentRef: HTMLDivElement | null;
   parentId: string | number;
   addParentChildConnection: (connection: ParentChildConnection) => void;
-  removeParentChildConnection: (
-    childId: string | number
-  ) => void;
+  removeParentChildConnection: (childId: string | number) => void;
   depth: number;
   selectedItem: string | number | undefined;
   setSelectedItem: (value: string | number | undefined) => void;
@@ -30,14 +28,14 @@ export const Item = <T extends HasIdAndChildren>({
   setSelectedItem,
   parentId,
   addParentChildConnection,
-  removeParentChildConnection
+  removeParentChildConnection,
 }: ItemProps<T>) => {
   const [newParentRef, setNewParentRef] = useState<HTMLDivElement | null>(null);
 
-  useEffect(()=> {
-    return ()=> {
+  useEffect(() => {
+    return () => {
       removeParentChildConnection(item.id);
-    }
+    };
   }, []); //eslint-disable-line
 
   useEffect(() => {
@@ -80,9 +78,9 @@ export const Item = <T extends HasIdAndChildren>({
       <tbody>
         <tr>
           <td>
-            {side === "left" ? (
+            {side === 'left' ? (
               <ItemGroup
-              removeParentChildConnection={removeParentChildConnection}
+                removeParentChildConnection={removeParentChildConnection}
                 parentRef={newParentRef}
                 parentId={item.id}
                 addParentChildConnection={addParentChildConnection}
@@ -95,9 +93,7 @@ export const Item = <T extends HasIdAndChildren>({
               />
             ) : (
               <ItemWrapperBackground tabIndex={-1} ref={setRef}>
-                <ItemWrapper
-                  onClick={selectItem}
-                >
+                <ItemWrapper onClick={selectItem}>
                   {renderItem(item, depth, {
                     isSelected: item.id === selectedItem,
                   })}
@@ -106,11 +102,9 @@ export const Item = <T extends HasIdAndChildren>({
             )}
           </td>
           <td>
-            {side === "left" ? (
+            {side === 'left' ? (
               <ItemWrapperBackground tabIndex={-1} ref={setRef}>
-                <ItemWrapper
-                  onClick={selectItem}
-                >
+                <ItemWrapper onClick={selectItem}>
                   {renderItem(item, depth, {
                     isSelected: item.id === selectedItem,
                   })}
@@ -118,7 +112,7 @@ export const Item = <T extends HasIdAndChildren>({
               </ItemWrapperBackground>
             ) : (
               <ItemGroup
-              removeParentChildConnection={removeParentChildConnection}
+                removeParentChildConnection={removeParentChildConnection}
                 parentRef={newParentRef}
                 parentId={item.id}
                 addParentChildConnection={addParentChildConnection}
@@ -137,15 +131,15 @@ export const Item = <T extends HasIdAndChildren>({
   );
 };
 
-const ItemWrapperBackground = styled.div `
+const ItemWrapperBackground = styled.div`
   position: relative;
   &:focus {
     outline: none;
-  };
+  }
   z-index: 1;
 `;
 
-const ItemWrapper = styled.div `
+const ItemWrapper = styled.div`
   position: relative;
   z-index: 2;
 `;

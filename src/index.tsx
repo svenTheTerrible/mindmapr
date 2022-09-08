@@ -1,9 +1,16 @@
-import React, { CSSProperties, ReactNode, useCallback, useRef, useState } from "react";
-import ClickAwayListener from "react-click-away-listener";
-import ItemLines, { ParentChildConnection } from "./ItemLines";
-import MindmaprItems from "./MindmaprItems";
+import React, {
+  CSSProperties,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import ClickAwayListener from 'react-click-away-listener';
+import ItemLines, { ParentChildConnection } from './ItemLines';
+import MindmaprItems from './MindmaprItems';
 import styled from 'styled-components';
-import { findMindmapElementById } from "./util";
+import { findMindmapElementById } from './util';
 
 export interface HasIdAndChildren {
   id: string | number;
@@ -18,7 +25,7 @@ export interface MindmaprProps<T extends HasIdAndChildren> {
   items: T;
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
   addChildKey?: string;
-  side?: "both" | "left" | "right";
+  side?: 'both' | 'left' | 'right';
   addChildOnParentLevelKey?: string;
   deleteItemKey?: string;
   overwriteOnSelectedItemKeydown?: (
@@ -30,9 +37,7 @@ export interface MindmaprProps<T extends HasIdAndChildren> {
   createNewItem?: (parent: T) => T | undefined;
 }
 
-export {
-  findMindmapElementById
-}
+export { findMindmapElementById };
 
 export const Mindmapr = <T extends HasIdAndChildren>({
   items,
@@ -40,16 +45,39 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   createNewItem,
   renderItem,
   overwriteOnSelectedItemKeydown,
-  addChildKey = "Tab",
-  deleteItemKey = "Delete",
-  side = "both",
-  addChildOnParentLevelKey = "Enter",
+  addChildKey = 'Tab',
+  deleteItemKey = 'Delete',
+  side = 'both',
+  addChildOnParentLevelKey = 'Enter',
   overwriteLineStyle,
 }: MindmaprProps<T>) => {
   const [parentChildConnections, setParentChildConnections] = useState<
     ParentChildConnection[]
   >([]);
   const parentChildConnectionsRef = useRef<ParentChildConnection[]>([]);
+  const [outsideLineUpdater, setOutsideLineUpdater] = useState<number>(0);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const updateLinesAfterResize = () => {
+      setOutsideLineUpdater(current => current + 1);
+    };
+
+    scrollContainerRef.current?.addEventListener(
+      'resize',
+      updateLinesAfterResize
+    );
+    return () => {
+      scrollContainerRef.current?.removeEventListener(
+        'resize',
+        updateLinesAfterResize
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    setOutsideLineUpdater(current => current + 1);
+  }, [items, setOutsideLineUpdater, side]);
 
   const [selectedItem, setSelectedItem] = useState<number | string | undefined>(
     undefined
@@ -61,7 +89,7 @@ export const Mindmapr = <T extends HasIdAndChildren>({
 
   const addParentChildConnection = useCallback(
     (connection: ParentChildConnection) => {
-      setParentChildConnections((current) => {
+      setParentChildConnections(current => {
         const newValue = [...current, connection];
         parentChildConnectionsRef.current = newValue;
         return newValue;
@@ -72,12 +100,10 @@ export const Mindmapr = <T extends HasIdAndChildren>({
 
   const removeParentChildConnection = useCallback(
     (childId: string | number) => {
-      setParentChildConnections((current) => {
-        const newValue = current.filter((connection) => {
-          return (
-            connection.childId !== childId
-          );
-        })
+      setParentChildConnections(current => {
+        const newValue = current.filter(connection => {
+          return connection.childId !== childId;
+        });
         parentChildConnectionsRef.current = newValue;
         return newValue;
       });
@@ -87,7 +113,10 @@ export const Mindmapr = <T extends HasIdAndChildren>({
 
   return (
     <ClickAwayListener onClickAway={clearSelectedItem}>
-      <ScrollContainer onClick={clearSelectedItem}>
+      <ScrollContainer
+        onClick={clearSelectedItem}
+        ref={ref => (scrollContainerRef.current = ref)}
+      >
         <InnerContainer>
           <MindmaprItems
             parentChildConnectionsRef={parentChildConnectionsRef}
@@ -108,13 +137,13 @@ export const Mindmapr = <T extends HasIdAndChildren>({
           <ItemLines
             parentChildConnections={parentChildConnections}
             overwriteLineStyle={overwriteLineStyle}
+            outsideLineUpdateCounter={outsideLineUpdater}
           />
         </InnerContainer>
       </ScrollContainer>
     </ClickAwayListener>
   );
 };
-
 
 const ScrollContainer = styled.div`
   display: flex;
@@ -126,10 +155,10 @@ const ScrollContainer = styled.div`
 
 const InnerContainer = styled.div`
   display: flex;
-  justify-items: center;
+  justify-content: center;
   align-items: center;
   margin-top: auto;
   margin-bottom: auto;
   margin-left: auto;
   margin-right: auto;
-`
+`;

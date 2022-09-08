@@ -1,6 +1,6 @@
-import React, { CSSProperties, memo, useMemo } from "react";
-import { ItemLine, LineProps } from "./ItemLine";
-import { calculateLineAndSvgCoords } from "./util";
+import React, { CSSProperties, memo } from 'react';
+import { ItemLine, LineProps } from './ItemLine';
+import { calculateLineAndSvgCoords } from './util';
 
 export interface ParentChildConnection {
   parentHtmlItem: HTMLDivElement;
@@ -15,30 +15,33 @@ type LineCoords = Record<string, LineProps & { depth: number }>;
 interface ItemLinesProps {
   parentChildConnections: ParentChildConnection[];
   overwriteLineStyle?: (depth: number) => CSSProperties;
+  outsideLineUpdateCounter: number;
 }
 
 export default memo(function ItemLines({
   parentChildConnections,
   overwriteLineStyle,
 }: ItemLinesProps) {
-
-  const coords = useMemo(()=> {
-    return parentChildConnections.reduce((acc: LineCoords, connection) => {
+  const coords = parentChildConnections.reduce(
+    (acc: LineCoords, connection) => {
       const connectionId = `${connection.parentId} ${connection.childId}`;
-      return {...acc, [connectionId]:{
-        ...calculateLineAndSvgCoords(
-          connection.childHtmlItem,
-          connection.parentHtmlItem
-        ),
-        depth: connection.depth,
-      }};
-    }, {});
-  }, [parentChildConnections]);
-
+      return {
+        ...acc,
+        [connectionId]: {
+          ...calculateLineAndSvgCoords(
+            connection.childHtmlItem,
+            connection.parentHtmlItem
+          ),
+          depth: connection.depth,
+        },
+      };
+    },
+    {}
+  );
 
   return (
     <div>
-      {Object.keys(coords).map((key) => (
+      {Object.keys(coords).map(key => (
         <ItemLine
           overwriteLineStyle={overwriteLineStyle}
           depth={coords[key].depth}

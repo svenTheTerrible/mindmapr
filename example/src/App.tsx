@@ -1,9 +1,10 @@
-import React, { FC, ReactNode, useState } from "react";
-import "./App.css";
-import { MindmapItem } from "./MindmapItem";
-import { Mindmapr, RenderItemState } from "../../";
-import uniqid from "uniqid";
-import { findMindmapElementById } from "../../";
+import React, { FC, ReactNode, useState } from 'react';
+import './App.css';
+import { MindmapItem } from './MindmapItem';
+import { Mindmapr, RenderItemState } from '../../';
+import uniqid from 'uniqid';
+import _ from 'lodash';
+import { findMindmapElementById } from '../../';
 
 export interface MindmapData {
   id: string | number;
@@ -13,30 +14,30 @@ export interface MindmapData {
 
 export const App: FC = () => {
   const [data, setData] = useState<MindmapData>({
-    id: "center",
-    name: "mindmapr",
+    id: 'center',
+    name: 'mindmapr',
     children: [
       {
         id: 1,
-        name: "first child",
+        name: 'first child',
         children: [
           {
             id: 7,
-            name: "1-1",
+            name: '1-1',
             children: [],
           },
           {
             id: 8,
-            name: "1-2",
+            name: '1-2',
             children: [
               {
                 id: 9,
-                name: "1-2-1",
+                name: '1-2-1',
                 children: [],
               },
               {
                 id: 10,
-                name: "1-2-2",
+                name: '1-2-2',
                 children: [],
               },
             ],
@@ -45,64 +46,64 @@ export const App: FC = () => {
       },
       {
         id: 2,
-        name: "second child",
+        name: 'second child',
         children: [
           {
             id: 17,
-            name: "2-1",
+            name: '2-1',
             children: [],
           },
         ],
       },
       {
         id: 3,
-        name: "third child",
+        name: 'third child',
         children: [],
       },
       {
         id: 4,
-        name: "fourth child",
+        name: 'fourth child',
         children: [
           {
             id: 16,
-            name: "4-1",
+            name: '4-1',
             children: [],
           },
         ],
       },
       {
         id: 5,
-        name: "fifth child",
+        name: 'fifth child',
         children: [],
       },
       {
         id: 6,
-        name: "sixth child",
+        name: 'sixth child',
         children: [
           {
             id: 11,
-            name: "6-1",
+            name: '6-1',
             children: [],
           },
           {
             id: 12,
-            name: "6-2",
+            name: '6-2',
             children: [
               {
                 id: 14,
-                name: "6-2-1",
+                name: '6-2-1',
                 children: [],
               },
               {
                 id: 15,
-                name: "6-2-2",
+                name: '6-2-2',
                 children: [],
               },
             ],
           },
           {
             id: 13,
-            name: "6-3",
+            name: '6-3',
             children: [],
           },
         ],
@@ -111,12 +112,12 @@ export const App: FC = () => {
   });
 
   const changeItemText = (id: string | number, name: string): void => {
-    setData((current) => {
+    setData(current => {
       const entryToUpdate = findMindmapElementById(current, id);
       if (entryToUpdate) {
         entryToUpdate.name = name;
       }
-      return current;
+      return _.cloneDeep(current);
     });
   };
 
@@ -139,7 +140,7 @@ export const App: FC = () => {
     return {
       id: uniqid(),
       children: [],
-      name: "new child",
+      name: 'new child',
     };
   };
 
