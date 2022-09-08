@@ -14,7 +14,7 @@ export interface MindmapData {
 export const App: FC = () => {
   const [data, setData] = useState<MindmapData>({
     id: "center",
-    name: "start",
+    name: "mindmapr",
     children: [
       {
         id: 1,
