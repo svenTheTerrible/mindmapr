@@ -321,7 +321,6 @@ const CenterItem = styled.div `
   &:focus {
     outline: none;
   };
-  background-color: white;
 `;
 
 const RightContainer = styled.div `

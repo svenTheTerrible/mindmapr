@@ -139,7 +139,6 @@ export const Item = <T extends HasIdAndChildren>({
 
 const ItemWrapperBackground = styled.div `
   position: relative;
-  background-color: white;
   &:focus {
     outline: none;
   };

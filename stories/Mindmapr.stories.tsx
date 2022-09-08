@@ -135,7 +135,7 @@ const items: ExampleItem = {
 
 
 const renderItem = (item: ExampleItem)=> {
-  return (<div>{item.name}</div>)
+  return (<div style={{backgroundColor: 'white'}}>{item.name}</div>)
 }
 
 
