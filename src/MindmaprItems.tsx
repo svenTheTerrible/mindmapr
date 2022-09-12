@@ -5,10 +5,10 @@ import React, {
   ReactNode,
   memo,
   MutableRefObject,
-} from "react";
-import { ItemGroup } from "./ItemGroup";
-import { ParentChildConnection } from "./ItemLines";
-import { HasIdAndChildren, RenderItemState } from "./";
+} from 'react';
+import { ItemGroup } from './ItemGroup';
+import { ParentChildConnection } from './ItemLines';
+import { HasIdAndChildren, RenderItemState } from './';
 import {
   addOnChildLevel,
   addOnParentLevel,
@@ -16,28 +16,22 @@ import {
   findNearestChildItem,
   removeItemById,
   splitItemsToLeftAndRight,
-} from "./util";
+} from './util';
 import styled from 'styled-components';
 
 interface MindmaprItemsProps<T extends HasIdAndChildren> {
   items: T;
   parentChildConnectionsRef: MutableRefObject<ParentChildConnection[]>;
-  side: "both" | "left" | "right";
+  side: 'both' | 'left' | 'right';
   addChildKey: string;
   deleteItemKey: string;
   addChildOnParentLevelKey: string;
   setData?: (items: T) => void;
-  overwriteOnSelectedItemKeydown?: (
-    selectedItem: string | number,
-    e: KeyboardEvent
-  ) => void;
   createNewItem?: (parent: T) => T;
   selectedItem?: string | number;
   setSelectedItem: (value?: string | number) => void;
   addParentChildConnection: (connection: ParentChildConnection) => void;
-  removeParentChildConnection: (
-    childId: string | number
-  ) => void;
+  removeParentChildConnection: (childId: string | number) => void;
   renderItem: (data: T, depth: number, state: RenderItemState) => ReactNode;
 }
 
@@ -50,7 +44,6 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   renderItem,
   addParentChildConnection,
   removeParentChildConnection,
-  overwriteOnSelectedItemKeydown,
   selectedItem,
   setSelectedItem,
   addChildKey,
@@ -62,14 +55,14 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   );
 
   const { leftItems, rightItems } = useMemo(() => {
-    if (side === "left") {
-      return { leftItems: items.children, rightItems: [] } as unknown as {
+    if (side === 'left') {
+      return ({ leftItems: items.children, rightItems: [] } as unknown) as {
         leftItems: T[];
         rightItems: T[];
       };
     }
-    if (side === "right") {
-      return { leftItems: [], rightItems: items.children } as unknown as {
+    if (side === 'right') {
+      return ({ leftItems: [], rightItems: items.children } as unknown) as {
         leftItems: T[];
         rightItems: T[];
       };
@@ -100,11 +93,6 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         return;
       }
 
-      if (overwriteOnSelectedItemKeydown) {
-        overwriteOnSelectedItemKeydown(selectedItem, e);
-        return;
-      }
-
       const selectedItemIsCenter = selectedItem === items.id;
       const foundInLeftItems = findItemById(leftItems, selectedItem, items.id);
       const foundInRightItems = findItemById(
@@ -113,7 +101,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         items.id
       );
 
-      if (e.key === "ArrowDown") {
+      if (e.key === 'ArrowDown') {
         e.preventDefault();
         e.stopImmediatePropagation();
         if (selectedItemIsCenter) {
@@ -127,14 +115,14 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         }
       }
 
-      if (e.key === "ArrowLeft") {
+      if (e.key === 'ArrowLeft') {
         e.preventDefault();
         e.stopImmediatePropagation();
         if (selectedItemIsCenter && leftItems.length > 0) {
           setSelectedItem(
             findNearestChildItem(
               items.id,
-              leftItems.map((item) => item.id),
+              leftItems.map(item => item.id),
               parentChildConnectionsRef.current
             )
           );
@@ -157,14 +145,14 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         }
       }
 
-      if (e.key === "ArrowRight") {
+      if (e.key === 'ArrowRight') {
         e.preventDefault();
         e.stopImmediatePropagation();
         if (selectedItemIsCenter && rightItems.length > 0) {
           setSelectedItem(
             findNearestChildItem(
               items.id,
-              rightItems.map((item) => item.id),
+              rightItems.map(item => item.id),
               parentChildConnectionsRef.current
             )
           );
@@ -187,7 +175,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         }
       }
 
-      if (e.key === "ArrowUp") {
+      if (e.key === 'ArrowUp') {
         e.preventDefault();
         e.stopImmediatePropagation();
         if (selectedItemIsCenter) {
@@ -237,14 +225,16 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
         }
         const match = findItemById(items.children, selectedItem, items.id);
         const cleanItems = removeItemById(items, selectedItem);
-        setSelectedItem(match?.upperElementId ?? match?.lowerElementId ?? match?.parentId);
+        setSelectedItem(
+          match?.upperElementId ?? match?.lowerElementId ?? match?.parentId
+        );
         setData?.(cleanItems);
         return;
       }
     };
-    window.addEventListener("keydown", switchSelectionThroughKeypress);
+    window.addEventListener('keydown', switchSelectionThroughKeypress);
     return () => {
-      window.removeEventListener("keydown", switchSelectionThroughKeypress);
+      window.removeEventListener('keydown', switchSelectionThroughKeypress);
     };
   }, [
     selectedItem,
@@ -256,10 +246,9 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
     rightItems,
     addChildKey,
     addChildOnParentLevelKey,
-    overwriteOnSelectedItemKeydown,
     parentChildConnectionsRef,
     deleteItemKey,
-    removeParentChildConnection
+    removeParentChildConnection,
   ]);
 
   const selectCenterItem = (e: React.MouseEvent) => {
@@ -272,7 +261,7 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
     <>
       <LeftContainer>
         <ItemGroup
-        removeParentChildConnection={removeParentChildConnection}
+          removeParentChildConnection={removeParentChildConnection}
           parentRef={centerItemRef}
           parentId={items.id}
           addParentChildConnection={addParentChildConnection}
@@ -286,14 +275,14 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
       </LeftContainer>
       <CenterItem
         tabIndex={-1}
-        ref={(ref) => setCenterItemRef(ref)}
+        ref={ref => setCenterItemRef(ref)}
         onClick={selectCenterItem}
       >
         {renderItem(items, 0, { isSelected: selectedItem === items.id })}
       </CenterItem>
       <RightContainer>
         <ItemGroup
-        removeParentChildConnection={removeParentChildConnection}
+          removeParentChildConnection={removeParentChildConnection}
           parentRef={centerItemRef}
           parentId={items.id}
           addParentChildConnection={addParentChildConnection}
@@ -309,20 +298,19 @@ export default memo(function MindmaprItems<T extends HasIdAndChildren>({
   );
 });
 
-
-const LeftContainer = styled.div `
+const LeftContainer = styled.div`
   margin-right: 15px;
   flex-direction: column;
   align-items: flex-end;
 `;
 
-const CenterItem = styled.div `
+const CenterItem = styled.div`
   z-index: 2;
   &:focus {
     outline: none;
-  };
+  }
 `;
 
-const RightContainer = styled.div `
+const RightContainer = styled.div`
   margin-left: 15px;
 `;

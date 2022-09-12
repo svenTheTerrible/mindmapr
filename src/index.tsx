@@ -29,10 +29,6 @@ export interface MindmaprProps<T extends HasIdAndChildren> {
   side?: 'both' | 'left' | 'right';
   addChildOnParentLevelKey?: string;
   deleteItemKey?: string;
-  overwriteOnSelectedItemKeydown?: (
-    selectedItem: string | number,
-    e: KeyboardEvent
-  ) => void;
   overwriteLineStyle?: (depth: number) => CSSProperties;
   setData?: (items: T) => void;
   createNewItem?: (parent: T) => T | undefined;
@@ -45,7 +41,6 @@ export const Mindmapr = <T extends HasIdAndChildren>({
   setData,
   createNewItem,
   renderItem,
-  overwriteOnSelectedItemKeydown,
   addChildKey = 'Tab',
   deleteItemKey = 'Delete',
   side = 'both',
@@ -106,7 +101,6 @@ export const Mindmapr = <T extends HasIdAndChildren>({
               <MindmaprItems
                 parentChildConnectionsRef={parentChildConnectionsRef}
                 side={side}
-                overwriteOnSelectedItemKeydown={overwriteOnSelectedItemKeydown}
                 addChildKey={addChildKey}
                 deleteItemKey={deleteItemKey}
                 addChildOnParentLevelKey={addChildOnParentLevelKey}
