@@ -1,7 +1,7 @@
-import { LineProps } from "./ItemLine";
-import { HasIdAndChildren } from "./";
-import _ from "lodash";
-import { ParentChildConnection } from "./ItemLines";
+import { LineProps } from './ItemLine';
+import { HasIdAndChildren } from './';
+import _ from 'lodash';
+import { ParentChildConnection } from './ItemLines';
 
 interface Coords {
   x: number;
@@ -41,7 +41,7 @@ export const findItemById = <T extends HasIdAndChildren>(
       const upperElementId = i - 1 >= 0 ? items[i - 1].id : undefined;
       return {
         parentId,
-        childIds: items[i].children.map((child) => child.id),
+        childIds: items[i].children.map(child => child.id),
         lowerElementId,
         upperElementId,
       };
@@ -284,7 +284,7 @@ export const findNearestChildItem = (
       if (connection.parentId === parentId) {
         acc[parentId] = connection.parentHtmlItem;
       }
-      childIds.forEach((childId) => {
+      childIds.forEach(childId => {
         if (connection.childId === childId) {
           acc[childId] = connection.childHtmlItem;
         }
@@ -312,7 +312,7 @@ export const findNearestChildItem = (
     },
     []
   );
-  return _.sortBy(distanceFromParent, ["distance"])[0].childId;
+  return _.sortBy(distanceFromParent, ['distance'])[0].childId;
 };
 
 const calculateChildParentDistance = (
@@ -338,13 +338,20 @@ export const removeItemById = <T extends HasIdAndChildren>(
   item: T,
   id: string | number
 ): T => {
-  for (let i = 0; i < item.children.length; i++) {
-    if (item.children[i].id === id) {
-      item.children.splice(i, 1);
-      break;
-    } else {
-      removeItemById(item.children[i], id);
+  const _removeItemById = <T extends HasIdAndChildren>(
+    _item: T,
+    _id: string | number
+  ): void => {
+    for (let i = 0; i < _item.children.length; i++) {
+      if (_item.children[i].id === _id) {
+        _item.children.splice(i, 1);
+        break;
+      } else {
+        _removeItemById(_item.children[i], _id);
+      }
     }
-  }
-  return _.cloneDeep(item);
+  };
+  const clonedItem = _.cloneDeep(item);
+  _removeItemById(clonedItem, id);
+  return clonedItem;
 };
