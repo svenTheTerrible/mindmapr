@@ -9,6 +9,8 @@ dist/
 example/dist/
 example/.cache/
 
+storybook-static
+
 # Compiled Java class files
 *.class
 
